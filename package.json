@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.70",
+    "framer-motion": "^12.38.0",
+    "puppeteer": "^24.40.0"
+  }
+}
