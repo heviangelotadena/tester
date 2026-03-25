@@ -974,15 +974,16 @@ async function start() {
   });
 }
 
-// Start locally, or export for Vercel serverless
-if (process.env.VERCEL) {
-  // On Vercel: initialize once, export the app
-  initializeGoogleSheets().then(() => initializeSheets()).catch(() => {});
-  export default app;
-} else {
-  // Local: start the full server with follow-up processor
+// On Vercel: initialize services (no listen, no follow-up processor)
+// Locally: start the full server
+if (!process.env.VERCEL) {
   start().catch(error => {
     console.error('Failed to start server:', error);
     process.exit(1);
   });
+} else {
+  initializeGoogleSheets().then(() => initializeSheets()).catch(() => {});
 }
+
+// Export for Vercel serverless runtime
+export default app;
