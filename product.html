@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — Tester.io</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
+  <script>
+    if (window.location.protocol === 'file:') {
+      document.documentElement.innerHTML = '';
+      document.body.style.margin = '0';
+      document.body.style.fontFamily = 'Arial, sans-serif';
+      document.body.style.display = 'grid';
+      document.body.style.placeItems = 'center';
+      document.body.style.height = '100vh';
+      document.body.style.backgroundColor = '#111';
+      document.body.style.color = '#fff';
+      document.body.innerHTML = `
+        <div style="max-width: 500px; text-align: center; padding: 24px; border: 2px solid #f6c24f; border-radius: 12px;">
+          <h1 style="font-size: 2.4rem; margin-bottom: 16px;">This page requires a local server</h1>
+          <p style="margin-bottom: 12px; font-size: 1.1rem;">Do not open directly via file://</p>
+          <p style="margin-bottom: 24px;">Run this in your project folder:</p>
+          <pre style="background:#222; color:#f6c24f; padding:12px; border-radius:8px;">node serve.mjs</pre>
+          <p style="margin-top:16px;">Then visit <strong>http://localhost:3000/product.html</strong></p>
+        </div>
+      `;
+      throw new Error('Please run via http://localhost:3000/product.html, not file://');
+    }
+
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#C6A559',
+            'primary-dark': '#A88A3D',
+            'primary-light': '#E6B979',
+            heading: '#2f2f2f',
+            text: '#676767',
+            surface: '#0d0b08',
+            'surface-elevated': '#141210',
+            'surface-floating': '#1a1815',
+          },
+          fontFamily: {
+            heading: ['"Montserrat"', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
+            body: ['"Sarabun"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 62.5%; scroll-behavior: smooth; }
+    body {
+      color: #a1a1aa;
+      background-color: #0a0804;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1.8rem;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    @keyframes gridFade {
+      from { opacity: 0; }
+      to { opacity: 0.03; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .section-animate {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .section-animate.visible { opacity: 1; transform: translateY(0); }
+    .stagger-1 { transition-delay: 0.05s; }
+    .stagger-2 { transition-delay: 0.1s; }
+    .stagger-3 { transition-delay: 0.15s; }
+    .stagger-4 { transition-delay: 0.2s; }
+    .stagger-5 { transition-delay: 0.25s; }
+    .stagger-6 { transition-delay: 0.3s; }
+    .stagger-7 { transition-delay: 0.35s; }
+    .stagger-8 { transition-delay: 0.4s; }
+
+    .anim-fade-up { animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .anim-fade-in { animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    /* ===== GRAIN ===== */
+    .grain-overlay {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999;
+      opacity: 0.02; mix-blend-mode: overlay;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      background: linear-gradient(135deg, #C6A559, #A88A3D);
+      color: #fff;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-primary:focus-visible { outline: 2px solid #E6B979; outline-offset: 3px; }
+    .btn-primary:active { transform: translateY(0); opacity: 0.85; }
+
+    .btn-outline {
+      border: 1.5px solid rgba(198,165,89,0.5);
+      color: #E6B979;
+      background: transparent;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-outline:hover { background: rgba(198,165,89,0.1); border-color: #C6A559; transform: translateY(-2px); }
+    .btn-outline:focus-visible { outline: 2px solid #E6B979; outline-offset: 3px; }
+    .btn-outline:active { transform: translateY(0); }
+
+    /* ===== NAV ===== */
+    .nav-link {
+      position: relative; color: #d4d4d8;
+      font-weight: 500; font-size: 15px;
+      transition: opacity 0.2s ease;
+      letter-spacing: 0.01em;
+    }
+    .nav-link::after {
+      content: ''; position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1.5px;
+      background: linear-gradient(90deg, #C6A559, #E6B979);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { opacity: 0.8; }
+    .nav-link:focus-visible { outline: 2px solid #E6B979; outline-offset: 4px; }
+
+    /* ===== GLASS CARD ===== */
+    .glass-card {
+      background: rgba(40, 36, 28, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(198,165,89,0.18);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(198,165,89,0.1);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glass-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(198,165,89,0.35);
+      box-shadow: 0 12px 48px rgba(198,165,89,0.1), 0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    /* ===== PRODUCT CARD ===== */
+    .product-card {
+      background: rgba(40, 36, 28, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(198,165,89,0.12);
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(198,165,89,0.08);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.4), transparent);
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(198,165,89,0.3);
+      box-shadow: 0 16px 64px rgba(198,165,89,0.08), 0 4px 32px rgba(0,0,0,0.5);
+    }
+
+    /* ===== FEATURE ICON ===== */
+    .feature-icon-box {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(198,165,89,0.15), rgba(198,165,89,0.05));
+      border: 1px solid rgba(198,165,89,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ===== SHIMMER TEXT ===== */
+    .shimmer-text { position: relative; overflow: hidden; }
+    .shimmer-text::after {
+      content: ''; position: absolute;
+      top: 0; left: 0; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.08), transparent);
+      animation: shimmer 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* ===== GOLD TEXT ===== */
+    .gold-text {
+      background: linear-gradient(135deg, #E6B979, #C6A559, #E6B979);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===== SECTION DIVIDER ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.15), transparent);
+    }
+
+    /* ===== AMBIENT GLOW ===== */
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(80px);
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+
+    /* ===== COMPARISON TABLE ===== */
+    .comparison-row {
+      transition: background 0.2s ease;
+    }
+    .comparison-row:hover {
+      background: rgba(198,165,89,0.03);
+    }
+
+    /* ===== BADGE ===== */
+    .badge-popular {
+      background: linear-gradient(135deg, #C6A559, #A88A3D);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 999px;
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 4px 16px rgba(198,165,89,0.3);
+    }
+
+    /* ===== MOBILE MENU ===== */
+    #mobileMenu a {
+      transition: opacity 0.2s ease;
+    }
+    #mobileMenu a:hover { opacity: 0.7; }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Grain Noise Filter -->
+  <svg style="position:fixed;pointer-events:none;width:0;height:0;">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </svg>
+  <div class="grain-overlay" style="filter:url(#grain);"></div>
+
+  <!-- Top accent bar -->
+  <div class="fixed top-0 left-0 right-0 z-50 h-[2px]" style="background: linear-gradient(90deg, transparent 5%, #C6A559 30%, #E6B979 50%, #C6A559 70%, transparent 95%);"></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="fixed left-0 right-0 z-50 anim-fade-in" style="top: 2px; background: rgba(10,8,4,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(198,165,89,0.06);">
+    <div class="max-w-[1330px] mx-auto px-6 flex items-center justify-between" style="height: 72px;">
+      <a href="/" class="flex items-center gap-3" aria-label="Tester.io Home">
+        <img src="brand_assets/Tester Logo.png" alt="Tester.io" class="w-14 h-14">
+        <span class="font-heading font-bold text-3xl" style="letter-spacing: -0.04em; color: #fafafa;">Tester<span style="color: #C6A559;">.</span>io</span>
+      </a>
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="/#features" class="nav-link">Product</a>
+        <a href="/#pricing" class="nav-link">Pricing</a>
+        <a href="/#trusted" class="nav-link">Customers</a>
+        <a href="/#about" class="nav-link">Company</a>
+        <a href="/#faq" class="nav-link">Resources</a>
+        <a href="/#" class="nav-link">Partners</a>
+      </div>
+      <div class="hidden lg:flex items-center gap-4">
+        <a href="#" class="btn-outline px-5 py-2 rounded-lg font-heading font-semibold" style="font-size: 15px;">Login</a>
+        <a href="#" class="btn-primary px-5 py-2 rounded-lg font-heading font-semibold" style="font-size: 15px;">Get Started</a>
+      </div>
+      <button id="mobileMenuBtn" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+        <span class="block w-6 h-[2px] rounded" style="background: #fafafa;"></span>
+        <span class="block w-6 h-[2px] rounded" style="background: #fafafa;"></span>
+        <span class="block w-4 h-[2px] rounded" style="background: #fafafa;"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="fixed inset-0 z-40 pointer-events-none" style="background: #0a0804; opacity: 0; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div class="flex flex-col items-center justify-center h-full gap-6 pt-16">
+      <a href="/" class="text-xl font-heading font-semibold" style="color: #fafafa;">Home</a>
+      <a href="/#features" class="text-xl font-heading font-semibold" style="color: #fafafa;">Product</a>
+      <a href="/#pricing" class="text-xl font-heading font-semibold" style="color: #fafafa;">Pricing</a>
+      <a href="/#about" class="text-xl font-heading font-semibold" style="color: #fafafa;">Company</a>
+      <div class="flex flex-col gap-3 mt-4">
+        <a href="#" class="btn-outline px-8 py-3 rounded-lg font-heading font-semibold text-base text-center">Login</a>
+        <a href="#" class="btn-primary px-8 py-3 rounded-lg font-heading font-semibold text-base text-center">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="px-6 relative overflow-hidden" style="background: #0a0804; min-height: 70vh; display: flex; align-items: center; padding-top: 120px; padding-bottom: 80px;">
+    <!-- Background effects -->
+    <div class="ambient-glow" style="width:800px;height:800px;background:rgba(198,165,89,0.03);top:20%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%, rgba(198,165,89,0.04), transparent 60%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,#0a0804,transparent);pointer-events:none;z-index:1;"></div>
+
+    <div class="max-w-[1130px] mx-auto text-center relative z-10">
+      <div class="anim-fade-up">
+        <a href="/" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-heading font-semibold" style="font-size: 13px; color: #C6A559; background: rgba(198,165,89,0.08); border: 1px solid rgba(198,165,89,0.15); letter-spacing: 0.04em;">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Back to Home
+        </a>
+      </div>
+      <h1 class="shimmer-text font-heading font-bold mt-8 anim-fade-up delay-1" style="font-size: clamp(2.4rem, 5vw, 4rem); letter-spacing: -0.035em; line-height: 1.1; color: #fafafa;">
+        Products built for<br><span class="font-display italic gold-text">modern QA teams</span>
+      </h1>
+      <p class="mt-6 max-w-2xl mx-auto anim-fade-up delay-2" style="font-size: 18px; line-height: 1.75; color: #9ca3af;">
+        From test case management to AI-powered automation — explore the full Tester.io product suite designed to ship quality software, faster.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== CORE PRODUCTS SECTION ===== -->
+  <section class="px-6 py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #0a0804 0%, #12100c 50%, #0a0804 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:600px;height:600px;background:rgba(198,165,89,0.04);top:30%;right:-150px;"></div>
+
+    <div class="max-w-[1130px] mx-auto relative z-10">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm text-center section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Core Products</p>
+      <h2 class="shimmer-text font-heading font-bold text-center section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        Everything you need to <span class="font-display italic gold-text">deliver quality</span>
+      </h2>
+      <p class="mt-5 max-w-xl mx-auto text-center section-animate stagger-2" style="font-size: 17px; line-height: 1.75; color: #9ca3af;">
+        Three powerful products, one seamless platform. Each can work standalone or together for complete QA coverage.
+      </p>
+
+      <!-- Product Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16">
+
+        <!-- Product 1: Test Manager -->
+        <div class="product-card p-8 section-animate stagger-3">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style="background: linear-gradient(135deg, rgba(198,165,89,0.2), rgba(198,165,89,0.05)); border: 1px solid rgba(198,165,89,0.15);">
+            <svg class="w-7 h-7" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold mb-3" style="font-size: 22px; color: #fafafa; letter-spacing: -0.02em;">Test Manager</h3>
+          <p style="line-height: 1.75; color: #9ca3af; font-size: 15px; margin-bottom: 24px;">
+            Organize, write, and manage test cases with a powerful editor. Supports rich text, attachments, tags, and reusable steps. Built for teams that move fast.
+          </p>
+          <ul class="flex flex-col gap-3 mb-8">
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Rich test case editor
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Test plans & runs
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Role-based access control
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Jira & Linear integration
+            </li>
+          </ul>
+          <a href="#" class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl font-heading font-bold" style="font-size: 14px;">
+            Learn More
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </div>
+
+        <!-- Product 2: Automation Hub -->
+        <div class="product-card p-8 section-animate stagger-5 relative">
+          <div class="badge-popular">Most Popular</div>
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style="background: linear-gradient(135deg, rgba(198,165,89,0.2), rgba(198,165,89,0.05)); border: 1px solid rgba(198,165,89,0.15);">
+            <svg class="w-7 h-7" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold mb-3" style="font-size: 22px; color: #fafafa; letter-spacing: -0.02em;">Automation Hub</h3>
+          <p style="line-height: 1.75; color: #9ca3af; font-size: 15px; margin-bottom: 24px;">
+            Run automated tests at scale across browsers and devices. Parallel execution, smart retries, and detailed reporting baked in. Supports Selenium, Cypress, and Playwright.
+          </p>
+          <ul class="flex flex-col gap-3 mb-8">
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Cross-browser testing
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Parallel execution engine
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              CI/CD pipeline integration
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Smart flaky test detection
+            </li>
+          </ul>
+          <a href="#" class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl font-heading font-bold" style="font-size: 14px; box-shadow: 0 4px 24px rgba(198,165,89,0.2);">
+            Learn More
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </div>
+
+        <!-- Product 3: AI Insights -->
+        <div class="product-card p-8 section-animate stagger-7">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style="background: linear-gradient(135deg, rgba(198,165,89,0.2), rgba(198,165,89,0.05)); border: 1px solid rgba(198,165,89,0.15);">
+            <svg class="w-7 h-7" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold mb-3" style="font-size: 22px; color: #fafafa; letter-spacing: -0.02em;">AI Insights</h3>
+          <p style="line-height: 1.75; color: #9ca3af; font-size: 15px; margin-bottom: 24px;">
+            Let AI analyze your test results, predict failures before they happen, and suggest where to focus your testing effort. Powered by machine learning trained on millions of test runs.
+          </p>
+          <ul class="flex flex-col gap-3 mb-8">
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Predictive failure analysis
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Test coverage heatmaps
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Automated root cause analysis
+            </li>
+            <li class="flex items-center gap-3" style="color: #d4d4d8; font-size: 14px;">
+              <svg class="w-4 h-4 flex-shrink-0" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Release readiness scoring
+            </li>
+          </ul>
+          <a href="#" class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl font-heading font-bold" style="font-size: 14px;">
+            Learn More
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VIDEO SHOWCASE SECTION ===== -->
+  <section class="px-6 py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #0a0804 0%, #0e0c09 50%, #0a0804 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:700px;height:700px;background:rgba(198,165,89,0.04);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+
+    <div class="max-w-[960px] mx-auto relative z-10">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm text-center section-animate" style="color: #C6A559; letter-spacing: 0.15em;">See It In Action</p>
+      <h2 class="shimmer-text font-heading font-bold text-center section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        A closer look at <span class="font-display italic gold-text">precision testing</span>
+      </h2>
+      <p class="mt-5 max-w-xl mx-auto text-center section-animate stagger-2" style="font-size: 17px; line-height: 1.75; color: #9ca3af;">
+        Watch how Tester.io approaches quality — dissecting every layer with surgical precision, just like this smart watch teardown.
+      </p>
+
+      <!-- Video Player -->
+      <div class="mt-14 section-animate stagger-3" style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(198,165,89,0.18); box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 80px rgba(198,165,89,0.06); position: relative;">
+        <!-- Top shine line -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(198,165,89,0.4), transparent); z-index: 1;"></div>
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          poster=""
+          style="width: 100%; display: block; background: #0d0b08;"
+        >
+          <source src="Smart Watch Dissection.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <!-- Product CTAs -->
+      <div class="flex flex-wrap justify-center gap-4 mt-10 section-animate stagger-4">
+        <a href="smartwatch.html" class="btn-primary inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem; box-shadow: 0 4px 24px rgba(198,165,89,0.25), 0 0 80px rgba(198,165,89,0.08);">
+          Explore Smart Watch Pro
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="camera.html" class="btn-outline inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem;">
+          Explore ProCam
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+      </div>
+      <p class="text-center mt-4 section-animate stagger-5" style="font-size: 14px; color: #52525b;">Experience the full scroll-driven dissections</p>
+    </div>
+  </section>
+
+  <!-- ===== PLATFORM FEATURES SECTION ===== -->
+  <section class="px-6 py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #0a0804 0%, #0e0c09 50%, #0a0804 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:500px;height:500px;background:rgba(198,165,89,0.03);top:50%;left:-100px;transform:translateY(-50%);"></div>
+
+    <div class="max-w-[1130px] mx-auto relative z-10">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm text-center section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Platform</p>
+      <h2 class="shimmer-text font-heading font-bold text-center section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        Built-in capabilities across <span class="font-display italic gold-text">every product</span>
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-16">
+        <!-- Feature 1 -->
+        <div class="glass-card p-6 text-center section-animate stagger-2">
+          <div class="feature-icon-box mx-auto mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+          </div>
+          <h4 class="font-heading font-bold text-base mb-2" style="color: #e4e4e7;">Enterprise Security</h4>
+          <p style="font-size: 14px; line-height: 1.7; color: #9ca3af;">SOC 2 Type II, SSO, RBAC, and AES-256 encryption at rest.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="glass-card p-6 text-center section-animate stagger-3">
+          <div class="feature-icon-box mx-auto mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+          </div>
+          <h4 class="font-heading font-bold text-base mb-2" style="color: #e4e4e7;">Real-time Analytics</h4>
+          <p style="font-size: 14px; line-height: 1.7; color: #9ca3af;">Live dashboards with test pass rates, trends, and bottleneck analysis.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="glass-card p-6 text-center section-animate stagger-4">
+          <div class="feature-icon-box mx-auto mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-2.556a4.5 4.5 0 00-1.242-7.244l4.5-4.5a4.5 4.5 0 016.364 6.364l-1.757 1.757" /><path d="M14.828 14.828a4.5 4.5 0 01-6.364 0M9.172 9.172a4.5 4.5 0 016.364 0"/></svg>
+          </div>
+          <h4 class="font-heading font-bold text-base mb-2" style="color: #e4e4e7;">40+ Integrations</h4>
+          <p style="font-size: 14px; line-height: 1.7; color: #9ca3af;">Connect with Jira, GitHub, Slack, Jenkins, and your entire toolchain.</p>
+        </div>
+        <!-- Feature 4 -->
+        <div class="glass-card p-6 text-center section-animate stagger-5">
+          <div class="feature-icon-box mx-auto mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+          </div>
+          <h4 class="font-heading font-bold text-base mb-2" style="color: #e4e4e7;">Team Collaboration</h4>
+          <p style="font-size: 14px; line-height: 1.7; color: #9ca3af;">Shared workspaces, comments, mentions, and real-time test execution feeds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMPARISON TABLE SECTION ===== -->
+  <section class="px-6 py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #0a0804 0%, #11100d 50%, #0a0804 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+
+    <div class="max-w-[900px] mx-auto relative z-10">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm text-center section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Compare</p>
+      <h2 class="shimmer-text font-heading font-bold text-center section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        What's included in <span class="font-display italic gold-text">each product</span>
+      </h2>
+
+      <div class="mt-14 section-animate stagger-2" style="background: rgba(40,36,28,0.5); border: 1px solid rgba(198,165,89,0.12); border-radius: 16px; overflow: hidden;">
+        <table class="w-full" style="font-size: 15px;">
+          <thead>
+            <tr style="border-bottom: 1px solid rgba(198,165,89,0.12);">
+              <th class="text-left font-heading font-semibold px-6 py-4" style="color: #9ca3af;">Feature</th>
+              <th class="text-center font-heading font-semibold px-4 py-4" style="color: #e4e4e7;">Test Manager</th>
+              <th class="text-center font-heading font-semibold px-4 py-4" style="color: #C6A559;">Automation Hub</th>
+              <th class="text-center font-heading font-semibold px-4 py-4" style="color: #e4e4e7;">AI Insights</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="comparison-row" style="border-bottom: 1px solid rgba(198,165,89,0.06);">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">Test case management</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+            </tr>
+            <tr class="comparison-row" style="border-bottom: 1px solid rgba(198,165,89,0.06);">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">Automated test execution</td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+            </tr>
+            <tr class="comparison-row" style="border-bottom: 1px solid rgba(198,165,89,0.06);">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">Cross-browser testing</td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+            </tr>
+            <tr class="comparison-row" style="border-bottom: 1px solid rgba(198,165,89,0.06);">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">AI failure prediction</td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+            </tr>
+            <tr class="comparison-row" style="border-bottom: 1px solid rgba(198,165,89,0.06);">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">Real-time dashboards</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+            </tr>
+            <tr class="comparison-row" style="border-bottom: 1px solid rgba(198,165,89,0.06);">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">Coverage heatmaps</td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+              <td class="text-center px-4 py-3.5" style="color: #52525b;">—</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+            </tr>
+            <tr class="comparison-row">
+              <td class="px-6 py-3.5" style="color: #d4d4d8;">Team collaboration</td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              <td class="text-center px-4 py-3.5"><svg class="w-5 h-5 mx-auto" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA SECTION ===== -->
+  <section class="py-20 px-6 relative overflow-hidden" style="background: #0a0804;">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:500px;height:500px;background:rgba(198,165,89,0.04);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center, rgba(198,165,89,0.03), transparent 60%);pointer-events:none;"></div>
+
+    <div class="max-w-[700px] mx-auto text-center relative z-10">
+      <h2 class="font-heading font-bold shimmer-text section-animate" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        Ready to explore the<br><span class="font-display italic gold-text">full platform?</span>
+      </h2>
+      <p class="mt-5 section-animate stagger-1" style="font-size: 17px; line-height: 1.75; color: #52525b;">
+        Start your free trial today. No credit card required.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 mt-10 section-animate stagger-2">
+        <a href="#" class="btn-primary px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem; box-shadow: 0 4px 24px rgba(198,165,89,0.25), 0 0 80px rgba(198,165,89,0.08);">
+          Get Started Free
+          <svg class="inline-block ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="/" class="btn-outline px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem;">Back to Home</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="py-14 px-6" style="background: #0a0804; border-top: 1px solid rgba(198,165,89,0.06);">
+    <div class="max-w-[1130px] mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div>
+          <a href="/" class="flex items-center gap-2 mb-5">
+            <img src="brand_assets/Tester Logo.png" alt="Tester.io" class="w-11 h-11">
+            <span class="font-heading font-bold" style="letter-spacing: -0.03em; color: #fafafa;">Tester<span style="color: #C6A559;">.</span>io</span>
+          </a>
+          <p style="line-height: 1.7; color: #52525b; font-size: 15px;">AI-powered quality assurance for modern teams.</p>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4" style="color: #e4e4e7; text-transform: uppercase; letter-spacing: 0.08em;">Product</h4>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Features</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Pricing</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Integrations</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4" style="color: #e4e4e7; text-transform: uppercase; letter-spacing: 0.08em;">Company</h4>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">About</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Blog</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Careers</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4" style="color: #e4e4e7; text-transform: uppercase; letter-spacing: 0.08em;">Support</h4>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Help Center</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Documentation</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Status</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row items-center justify-between pt-8" style="border-top: 1px solid rgba(198,165,89,0.06);">
+        <p style="color: #3f3f46; font-size: 13px;">&copy; 2026 Tester.io. All rights reserved.</p>
+        <div class="flex items-center gap-6 mt-4 md:mt-0">
+          <a href="#" style="color: #3f3f46; font-size: 13px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#3f3f46'">Privacy</a>
+          <a href="#" style="color: #3f3f46; font-size: 13px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#3f3f46'">Terms</a>
+          <a href="#" style="color: #3f3f46; font-size: 13px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#3f3f46'">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    mobileMenuBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.style.opacity = menuOpen ? '1' : '0';
+      mobileMenu.style.pointerEvents = menuOpen ? 'auto' : 'none';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.pointerEvents = 'none';
+      });
+    });
+
+    // Scroll-triggered section animations
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.section-animate').forEach(el => {
+      sectionObserver.observe(el);
+    });
+  </script>
+</body>
+</html>

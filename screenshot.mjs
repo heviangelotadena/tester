@@ -17,6 +17,20 @@ const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] 
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 900 });
 await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+
+// Scroll through the page to trigger IntersectionObserver animations
+await page.evaluate(async () => {
+  const delay = ms => new Promise(r => setTimeout(r, ms));
+  const totalHeight = document.body.scrollHeight;
+  const step = window.innerHeight;
+  for (let y = 0; y <= totalHeight; y += step) {
+    window.scrollTo(0, y);
+    await delay(100);
+  }
+  window.scrollTo(0, 0);
+  await delay(500);
+});
+
 await page.screenshot({ path: join(dir, filename), fullPage: true });
 await browser.close();
 

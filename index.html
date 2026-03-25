@@ -8,7 +8,7 @@
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
   <script>
     if (window.location.protocol === 'file:') {
       document.documentElement.innerHTML = '';
@@ -24,7 +24,7 @@
           <h1 style="font-size: 2.4rem; margin-bottom: 16px;">Landing page requires local server</h1>
           <p style="margin-bottom: 12px; font-size: 1.1rem;">Do not open directly via file://</p>
           <p style="margin-bottom: 24px;">Run this in your project folder:</p>
-          <pre style="background:#222; color:#f6c24f; padding:12px; border-radius:8px;">node server.js</pre>
+          <pre style="background:#222; color:#f6c24f; padding:12px; border-radius:8px;">node serve.mjs</pre>
           <p style="margin-top:16px;">Then visit <strong>http://localhost:3000</strong></p>
         </div>
       `;
@@ -45,9 +45,13 @@
             'input-text': '#acacac',
             'bg-light': '#f7f7f7',
             'bg-gray': '#f3f5f6',
+            surface: '#0d0b08',
+            'surface-elevated': '#141210',
+            'surface-floating': '#1a1815',
           },
           fontFamily: {
             heading: ['"Montserrat"', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif'],
             body: ['"Sarabun"', 'sans-serif'],
           },
           container: {
@@ -64,15 +68,15 @@
       scroll-behavior: smooth;
     }
     body {
-      color: #676767;
-      background-color: #fff;
+      color: #a1a1aa;
+      background-color: #0a0804;
       font-family: 'Sarabun', sans-serif;
       font-size: 1.8rem;
       line-height: 1.4;
       font-weight: 400;
     }
 
-    /* Animations — only transform & opacity */
+    /* ===== ANIMATIONS — only transform & opacity ===== */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
@@ -108,71 +112,27 @@
       75% { transform: translateY(-6px) rotateY(-2deg); }
     }
 
-    /* Liquid blob morph → logo reveal */
+    /* Liquid blob morph */
     @keyframes liquidMorph {
-      0% {
-        border-radius: 42% 58% 62% 38% / 48% 32% 68% 52%;
-        transform: scale(0.3) rotate(0deg);
-        opacity: 1;
-      }
-      15% {
-        border-radius: 58% 42% 38% 62% / 62% 48% 52% 38%;
-        transform: scale(0.6) rotate(15deg);
-        opacity: 1;
-      }
-      30% {
-        border-radius: 38% 62% 52% 48% / 42% 58% 38% 62%;
-        transform: scale(0.85) rotate(-10deg);
-        opacity: 1;
-      }
-      50% {
-        border-radius: 52% 48% 42% 58% / 58% 38% 62% 42%;
-        transform: scale(1.05) rotate(5deg);
-        opacity: 1;
-      }
-      70% {
-        border-radius: 45% 55% 48% 52% / 52% 45% 55% 48%;
-        transform: scale(1.0) rotate(-2deg);
-        opacity: 1;
-      }
-      85% {
-        border-radius: 30% 30% 30% 30%;
-        transform: scale(1.0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        border-radius: 18px;
-        transform: scale(1.0) rotate(0deg);
-        opacity: 1;
-      }
+      0% { border-radius: 42% 58% 62% 38% / 48% 32% 68% 52%; transform: scale(0.3) rotate(0deg); opacity: 1; }
+      15% { border-radius: 58% 42% 38% 62% / 62% 48% 52% 38%; transform: scale(0.6) rotate(15deg); opacity: 1; }
+      30% { border-radius: 38% 62% 52% 48% / 42% 58% 38% 62%; transform: scale(0.85) rotate(-10deg); opacity: 1; }
+      50% { border-radius: 52% 48% 42% 58% / 58% 38% 62% 42%; transform: scale(1.05) rotate(5deg); opacity: 1; }
+      70% { border-radius: 45% 55% 48% 52% / 52% 45% 55% 48%; transform: scale(1.0) rotate(-2deg); opacity: 1; }
+      85% { border-radius: 30% 30% 30% 30%; transform: scale(1.0) rotate(0deg); opacity: 1; }
+      100% { border-radius: 18px; transform: scale(1.0) rotate(0deg); opacity: 1; }
     }
-
     @keyframes liquidGlow {
       0% { box-shadow: 0 0 60px 30px rgba(198,165,89,0.5), inset 0 0 40px rgba(198,165,89,0.3); }
       30% { box-shadow: 0 0 80px 40px rgba(198,165,89,0.4), inset 0 0 50px rgba(198,165,89,0.2); }
       60% { box-shadow: 0 0 40px 20px rgba(198,165,89,0.25), inset 0 0 20px rgba(198,165,89,0.1); }
       100% { box-shadow: 0 0 20px 10px rgba(198,165,89,0.1), inset 0 0 0px rgba(198,165,89,0.0); }
     }
-
     @keyframes logoFadeIn {
       0% { opacity: 0; transform: scale(0.5); filter: blur(12px); }
       40% { opacity: 0; transform: scale(0.6); filter: blur(8px); }
       70% { opacity: 0.7; transform: scale(0.95); filter: blur(2px); }
       100% { opacity: 1; transform: scale(1); filter: blur(0px); }
-    }
-
-    .liquid-blob {
-      position: absolute;
-      inset: -10px;
-      background: linear-gradient(135deg, #C6A559, #A88A3D, #E6B979, #C6A559);
-      background-size: 300% 300%;
-      animation: liquidMorph 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-                 liquidGlow 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      z-index: -1;
-    }
-
-    .logo-reveal-img {
-      animation: logoFadeIn 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     @keyframes borderGlow {
       0%, 100% { border-color: rgba(198,165,89,0.15); }
@@ -182,38 +142,47 @@
       0% { opacity: 0; transform: translate(-72%, -62%) scale(0.5); }
       100% { opacity: 1; transform: translate(-50%, -40%) scale(1); }
     }
-    .animate-spotlight { animation: spotlight 2s ease forwards; }
-
     @keyframes scrollLogos {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-    .trusted-scroll-track:hover { animation-play-state: paused; }
-
     @keyframes gridFade {
       from { opacity: 0; }
       to { opacity: 0.03; }
     }
-    .anim-fade-up {
-      animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
+    @keyframes goldPulse {
+      0%, 100% { opacity: 0.03; }
+      50% { opacity: 0.06; }
     }
-    .anim-fade-in {
-      animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
+    @keyframes floatPerson {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
-    .anim-scale-reveal {
-      animation: scaleReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
-    .anim-slide-left {
-      animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
+
+    .animate-spotlight { animation: spotlight 2s ease forwards; }
+    .animate-spin { animation: spin 1s linear infinite; }
+    .trusted-scroll-track:hover { animation-play-state: paused; }
+
+    .liquid-blob {
+      position: absolute; inset: -10px;
+      background: linear-gradient(135deg, #C6A559, #A88A3D, #E6B979, #C6A559);
+      background-size: 300% 300%;
+      animation: liquidMorph 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+                 liquidGlow 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      z-index: -1;
     }
-    .anim-slide-right {
-      animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
+    .logo-reveal-img {
+      animation: logoFadeIn 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
+
+    .anim-fade-up { animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .anim-fade-in { animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .anim-scale-reveal { animation: scaleReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .anim-slide-left { animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .anim-slide-right { animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
@@ -223,30 +192,22 @@
     .delay-7 { animation-delay: 0.7s; }
     .delay-8 { animation-delay: 0.8s; }
 
-    /* Interactive 3D Logo */
+    /* ===== INTERACTIVE 3D LOGO ===== */
     .hero-logo-container {
       perspective: 800px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       position: relative;
     }
     .hero-logo-3d {
-      width: 400px;
-      height: 400px;
+      width: 400px; height: 400px;
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.1s ease-out;
-      cursor: grab;
-      user-select: none;
+      cursor: grab; user-select: none;
     }
-    .hero-logo-3d:active {
-      cursor: grabbing;
-    }
+    .hero-logo-3d:active { cursor: grabbing; }
     .hero-logo-3d img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 100%; height: 100%; object-fit: contain;
       filter: drop-shadow(0 20px 40px rgba(198,165,89,0.25)) drop-shadow(0 8px 16px rgba(0,0,0,0.15));
       transition: filter 0.3s ease;
     }
@@ -254,57 +215,36 @@
       filter: drop-shadow(0 24px 48px rgba(198,165,89,0.35)) drop-shadow(0 12px 24px rgba(0,0,0,0.2));
     }
     .logo-glow {
-      position: absolute;
-      inset: -30px;
+      position: absolute; inset: -30px;
       background: radial-gradient(circle, rgba(198,165,89,0.3) 0%, transparent 70%);
       border-radius: 50%;
       animation: pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      pointer-events: none;
-      z-index: -1;
+      pointer-events: none; z-index: -1;
     }
     .logo-ring {
-      position: absolute;
-      inset: 15px;
-      border: 1px solid rgba(198,165,89,0.25);
-      border-radius: 18px;
+      position: absolute; inset: 15px;
+      border: 1px solid rgba(198,165,89,0.25); border-radius: 18px;
       animation: borderGlow 3s ease-in-out infinite;
-      pointer-events: none;
-      z-index: -1;
+      pointer-events: none; z-index: -1;
     }
     .logo-ring-outer {
-      position: absolute;
-      inset: 0px;
-      border: 1px solid rgba(198,165,89,0.12);
-      border-radius: 22px;
+      position: absolute; inset: 0;
+      border: 1px solid rgba(198,165,89,0.12); border-radius: 22px;
       animation: borderGlow 3s ease-in-out infinite 1.5s;
-      pointer-events: none;
-      z-index: -1;
+      pointer-events: none; z-index: -1;
     }
-    .logo-particles {
-      position: absolute;
-      inset: -60px;
-      pointer-events: none;
-      z-index: -1;
-    }
+    .logo-particles { position: absolute; inset: -60px; pointer-events: none; z-index: -1; }
     .logo-particle {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: #C6A559;
-      opacity: 0;
+      position: absolute; width: 3px; height: 3px;
+      border-radius: 50%; background: #C6A559; opacity: 0;
     }
 
-    /* Section reveal animations */
+    /* ===== SECTION REVEAL ANIMATIONS ===== */
     .section-animate {
-      opacity: 0;
-      transform: translateY(40px);
+      opacity: 0; transform: translateY(40px);
       transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .section-animate.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .section-animate.visible { opacity: 1; transform: translateY(0); }
     .stagger-1 { transition-delay: 0.05s; }
     .stagger-2 { transition-delay: 0.1s; }
     .stagger-3 { transition-delay: 0.15s; }
@@ -312,577 +252,238 @@
     .stagger-5 { transition-delay: 0.25s; }
     .stagger-6 { transition-delay: 0.3s; }
 
-    /* Grid background pattern */
-    .grid-bg {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(198,165,89,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(198,165,89,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      animation: gridFade 1s ease forwards;
-      pointer-events: none;
-    }
-    .dark .grid-bg {
-      background-image:
-        linear-gradient(rgba(198,165,89,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(198,165,89,0.04) 1px, transparent 1px);
-    }
-
-    /* Smooth card hover with tilt */
-    .tilt-card {
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .tilt-card:hover {
-      transform: translateY(-6px) scale(1.01);
-    }
-
-    /* Shimmer effect for headings */
-    .shimmer-text {
-      position: relative;
-      overflow: hidden;
-    }
-    .shimmer-text::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.08), transparent);
-      animation: shimmer 4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    /* Grain texture overlay */
+    /* ===== GRAIN TEXTURE ===== */
     .grain-overlay {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.025;
-      mix-blend-mode: overlay;
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999;
+      opacity: 0.02; mix-blend-mode: overlay;
     }
 
-    /* Enhanced dark hero gradient — shader handles background now */
-    .dark .hero-section {
-      background: #0a0804 !important;
-    }
-
-    /* Smooth page-level parallax feel */
-    .parallax-subtle {
-      will-change: transform;
-    }
-
-    /* Button styles */
+    /* ===== BUTTONS ===== */
     .btn-primary {
       background: linear-gradient(135deg, #C6A559, #A88A3D);
       color: #fff;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      position: relative; overflow: hidden;
     }
-    .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
+    .btn-primary::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-primary:hover::before { opacity: 1; }
     .btn-primary:focus-visible { outline: 2px solid #E6B979; outline-offset: 3px; }
     .btn-primary:active { transform: translateY(0); opacity: 0.85; }
 
     .btn-outline {
-      border: 1.5px solid #C6A559;
-      color: #C6A559;
+      border: 1.5px solid rgba(198,165,89,0.5);
+      color: #E6B979;
       background: transparent;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, color 0.2s ease;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
-    .btn-outline:hover { background: #C6A559; color: #fff; transform: translateY(-2px); }
+    .btn-outline:hover { background: rgba(198,165,89,0.1); border-color: #C6A559; transform: translateY(-2px); }
     .btn-outline:focus-visible { outline: 2px solid #E6B979; outline-offset: 3px; }
     .btn-outline:active { transform: translateY(0); }
 
-    /* Nav link */
+    /* ===== NAVIGATION ===== */
     .nav-link {
-      position: relative;
-      color: #2f2f2f;
-      font-weight: 500;
-      font-size: 16px;
+      position: relative; color: #d4d4d8;
+      font-weight: 500; font-size: 15px;
       transition: opacity 0.2s ease;
+      letter-spacing: 0.01em;
     }
     .nav-link::after {
-      content: '';
-      position: absolute;
+      content: ''; position: absolute;
       bottom: -4px; left: 0;
-      width: 0; height: 2px;
-      background: #C6A559;
+      width: 0; height: 1.5px;
+      background: linear-gradient(90deg, #C6A559, #E6B979);
       transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .nav-link:hover::after { width: 100%; }
     .nav-link:hover { opacity: 0.8; }
     .nav-link:focus-visible { outline: 2px solid #E6B979; outline-offset: 4px; }
 
-    /* Tab styles */
+    /* ===== TABS ===== */
     .tab-btn {
-      cursor: pointer;
-      padding: 12px 24px;
-      font-weight: 600;
-      font-size: 16px;
+      cursor: pointer; padding: 12px 24px;
+      font-weight: 600; font-size: 16px;
       font-family: 'Montserrat', sans-serif;
-      color: #676767;
+      color: #52525b;
       border-bottom: 2px solid transparent;
       background: none;
       border-top: none; border-left: none; border-right: none;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease, color 0.2s ease;
     }
-    .tab-btn:hover { opacity: 0.7; }
+    .tab-btn:hover { opacity: 0.7; color: #a1a1aa; }
     .tab-btn:focus-visible { outline: 2px solid #E6B979; outline-offset: 2px; }
-    .tab-btn.active {
-      color: #C6A559;
-      border-bottom-color: #C6A559;
-    }
+    .tab-btn.active { color: #C6A559; border-bottom-color: #C6A559; }
 
-    /* FAQ accordion */
-    .faq-item {
-      border-bottom: 1px solid #e8e8e8;
-    }
+    /* ===== FAQ ACCORDION ===== */
+    .faq-item { border-bottom: 1px solid rgba(198,165,89,0.15); }
     .faq-question {
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-      font-weight: 600;
-      color: #2f2f2f;
-      font-size: 18px;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      font-family: 'Montserrat', sans-serif;
+      cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center;
+      padding: 24px 0; font-weight: 600;
+      color: #e4e4e7; font-size: 18px;
+      background: none; border: none; width: 100%;
+      text-align: left; font-family: 'Montserrat', sans-serif;
       transition: opacity 0.2s ease;
     }
     .faq-question:hover { opacity: 0.7; }
     .faq-question:focus-visible { outline: 2px solid #E6B979; outline-offset: 2px; }
     .faq-answer {
-      max-height: 0;
-      overflow: hidden;
+      max-height: 0; overflow: hidden;
       transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .faq-answer.open { max-height: 300px; }
-    .faq-chevron {
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      flex-shrink: 0;
-    }
+    .faq-chevron { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); flex-shrink: 0; }
     .faq-chevron.open { transform: rotate(180deg); }
 
-    /* Stat card hover */
-    .stat-card {
-      background: #fff;
-      border: 1px solid #f0f0f0;
-      border-radius: 12px;
-      padding: 28px 24px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(198,165,89,0.04), 0 1px 3px rgba(0,0,0,0.03);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* ===== GLASS CARD ===== */
+    .glass-card {
+      background: rgba(40, 36, 28, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(198,165,89,0.18);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(198,165,89,0.1);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .stat-card:hover { transform: translateY(-4px); }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(198,165,89,0.35);
+      box-shadow: 0 8px 40px rgba(198,165,89,0.1), 0 4px 24px rgba(0,0,0,0.5);
+    }
 
-    /* Feature card */
+    /* ===== STAT CARD ===== */
+    .stat-card {
+      background: rgba(40, 36, 28, 0.9);
+      border: 1px solid rgba(198,165,89,0.2);
+      border-radius: 16px;
+      padding: 36px 24px;
+      text-align: center;
+      position: relative; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(198,165,89,0.1);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.5), transparent);
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(198,165,89,0.4);
+    }
+
+    /* ===== FEATURE ICON BOX ===== */
     .feature-icon-box {
-      width: 52px; height: 52px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(198,165,89,0.12), rgba(198,165,89,0.05));
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(198,165,89,0.15), rgba(198,165,89,0.05));
+      border: 1px solid rgba(198,165,89,0.1);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
 
-    /* Logo strip grayscale */
-    .logo-strip img {
-      filter: grayscale(100%);
-      opacity: 0.5;
-      transition: opacity 0.3s ease, filter 0.3s ease;
-    }
-    .logo-strip img:hover {
-      filter: grayscale(0%);
-      opacity: 0.9;
+    /* ===== SHIMMER TEXT ===== */
+    .shimmer-text { position: relative; overflow: hidden; }
+    .shimmer-text::after {
+      content: ''; position: absolute;
+      top: 0; left: 0; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.08), transparent);
+      animation: shimmer 4s ease-in-out infinite;
+      pointer-events: none;
     }
 
-    /* Scrollbar subtle */
+    /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #dadada; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
 
-    /* Hero form shadow */
-    .hero-form-card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(198,165,89,0.08), 0 8px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-      border: 1px solid #f0ebe0;
+    /* ===== SECTION DIVIDER ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(198,165,89,0.15), transparent);
     }
 
-    /* Illustration person */
-    .illustration-float {
-      animation: floatPerson 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    /* ===== GOLD GRADIENT TEXT ===== */
+    .gold-text {
+      background: linear-gradient(135deg, #E6B979, #C6A559, #E6B979);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    @keyframes floatPerson {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+
+    /* ===== CONTACT FORM CARD ===== */
+    .contact-form-card {
+      background: rgba(40, 36, 28, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(198,165,89,0.2);
+      box-shadow: 0 8px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(198,165,89,0.1);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+    }
+    .contact-form-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(198,165,89,0.25);
+    }
+    .contact-form-card input:focus,
+    .contact-form-card textarea:focus {
+      border-color: #C6A559 !important;
+      box-shadow: 0 0 0 3px rgba(198,165,89,0.1), 0 4px 12px rgba(198,165,89,0.08) !important;
+      background-color: rgba(26, 24, 21, 0.8);
+    }
+
+    /* ===== AMBIENT GLOW EFFECTS ===== */
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(80px);
     }
 
     /* ===== THEME TOGGLE ===== */
     .theme-toggle {
-      width: 64px;
-      height: 32px;
-      padding: 4px;
-      border-radius: 9999px;
-      cursor: pointer;
-      background: #fff;
-      border: 1px solid #e4e4e7;
+      width: 64px; height: 32px; padding: 4px;
+      border-radius: 9999px; cursor: pointer;
+      background: #141210;
+      border: 1px solid #27272a;
       transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
-    .theme-toggle:focus-visible {
-      outline: 2px solid #E6B979;
-      outline-offset: 2px;
-    }
-    .theme-toggle:hover {
-      border-color: #d4d4d8;
-    }
-
+    .theme-toggle:focus-visible { outline: 2px solid #E6B979; outline-offset: 2px; }
+    .theme-toggle:hover { border-color: #3f3f46; }
     .theme-toggle-track {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      height: 100%;
+      display: flex; justify-content: space-between;
+      align-items: center; width: 100%; height: 100%;
       position: relative;
     }
-
     .theme-toggle-thumb {
-      width: 24px;
-      height: 24px;
-      border-radius: 9999px;
-      background: #e4e4e7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      left: 0;
+      width: 24px; height: 24px; border-radius: 9999px;
+      background: #27272a;
+      display: flex; align-items: center; justify-content: center;
+      position: absolute; left: 0;
       transform: translateX(32px);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 2;
     }
+    .theme-icon { position: absolute; transition: opacity 0.25s ease; }
+    .icon-moon { opacity: 1; stroke: #fafafa; }
+    .icon-sun { opacity: 0; stroke: #71717a; }
+    .theme-track-icon { position: relative; z-index: 1; transition: opacity 0.25s ease; }
+    .track-sun { opacity: 1; margin-left: 5px; stroke: #71717a; }
+    .track-moon { opacity: 0; margin-right: 5px; stroke: #fafafa; }
 
-    .theme-icon {
-      position: absolute;
-      transition: opacity 0.25s ease;
-    }
-    /* Light mode: thumb on RIGHT showing Sun */
-    .icon-moon { opacity: 0; stroke: #18181b; }
-    .icon-sun { opacity: 1; stroke: #71717a; }
-
-    .theme-track-icon {
-      position: relative;
-      z-index: 1;
-      transition: opacity 0.25s ease;
-    }
-    /* Light mode: Moon icon visible on left track */
-    .track-sun { opacity: 0; margin-left: 5px; stroke: #a1a1aa; }
-    .track-moon { opacity: 1; margin-right: 5px; stroke: #18181b; }
-
-    /* Dark state for toggle */
-    .dark .theme-toggle {
-      background: #09090b;
-      border-color: #27272a;
-    }
-    .dark .theme-toggle:hover {
-      border-color: #3f3f46;
-    }
-    /* Dark mode: thumb on LEFT showing Moon */
-    .dark .theme-toggle-thumb {
-      transform: translateX(0);
-      background: #27272a;
-    }
-    .dark .icon-moon { opacity: 1; stroke: #fafafa; }
-    .dark .icon-sun { opacity: 0; }
-    /* Dark mode: Sun icon visible on right track */
-    .dark .track-sun { opacity: 1; stroke: #71717a; }
-    .dark .track-moon { opacity: 0; }
-
-    /* ===== DARK MODE STYLES ===== */
-    .dark body {
-      background-color: #0a0a0a;
-      color: #a1a1aa;
-    }
-
-    /* Top accent bar */
-    .dark .top-accent-bar {
-      background: linear-gradient(90deg, #C6A559, #8B7340, #C6A559) !important;
-    }
-
-    /* Navigation */
-    .dark nav {
-      background-color: #0a0a0a !important;
-      box-shadow: 0 1px 0 #1a1a1a !important;
-    }
-    .dark .nav-link {
-      color: #d4d4d8;
-    }
-    .dark .nav-link:hover { opacity: 0.7; }
-    .dark .nav-link::after {
-      background: #C6A559;
-    }
-    .dark .logo-text {
-      color: #fafafa;
-    }
-
-    /* Buttons in dark */
-    .dark .btn-outline {
-      border-color: #C6A559;
-      color: #C6A559;
-    }
-    .dark .btn-outline:hover {
-      background: #C6A559;
-      color: #0a0a0a;
-    }
-
-    /* Mobile menu */
-    .dark #mobileMenu {
-      background-color: #0a0a0a !important;
-    }
-    .dark #mobileMenu a {
-      color: #fafafa;
-    }
-
-    /* Hero section */
-    .dark .hero-section {
-      background: linear-gradient(180deg, #111 0%, #0a0a0a 100%) !important;
-    }
-    .dark .hero-heading {
-      color: #fafafa;
-    }
-    .dark .hero-sub {
-      color: #a1a1aa;
-    }
-
-    /* Hero form card */
-    .dark .hero-form-card {
-      background: #111 !important;
-      border-color: #27272a !important;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3), 0 8px 40px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.15) !important;
-    }
-    .dark .hero-form-card .border-gray-100 {
-      border-color: #27272a !important;
-    }
-    .dark .tab-btn {
-      color: #71717a;
-    }
-    .dark .tab-btn.active {
-      color: #C6A559;
-      border-bottom-color: #C6A559;
-    }
-    .dark .hero-form-card h4,
-    .dark .hero-form-card label {
-      color: #e4e4e7;
-    }
-    .dark .hero-form-card p {
-      color: #a1a1aa;
-    }
-    .dark .hero-form-card input,
-    .dark .hero-form-card select {
-      background: #18181b;
-      border-color: #27272a;
-      color: #e4e4e7;
-    }
-    .dark .hero-form-card input::placeholder,
-    .dark .hero-form-card select {
-      color: #52525b;
-    }
-    .dark .hero-form-card input:focus,
-    .dark .hero-form-card select:focus {
-      border-color: #C6A559;
-    }
-    .dark .feature-icon-box {
-      background: linear-gradient(135deg, rgba(198,165,89,0.15), rgba(198,165,89,0.05));
-    }
-
-    /* Trusted section */
-    .dark .trusted-section {
-      background-color: #0a0a0a;
-      border-color: #1a1a1a !important;
-    }
-    .dark .trusted-section p {
-      color: #d4d4d8;
-    }
-
-    /* Features section */
-    .dark .features-section {
-      background-color: #0a0a0a;
-    }
-    .dark .section-heading {
-      color: #fafafa;
-    }
-    .dark .section-subtext {
-      color: #a1a1aa;
-    }
-    .dark .feature-card {
-      background: #111 !important;
-      border-color: #27272a !important;
-    }
-    .dark .feature-card h3 {
-      color: #e4e4e7;
-    }
-    .dark .feature-card p {
-      color: #a1a1aa;
-    }
-
-    /* About / Why section */
-    .dark .about-section {
-      background: #111 !important;
-    }
-    .dark .about-section .section-heading,
-    .dark .about-section h2 {
-      color: #fafafa;
-    }
-    .dark .about-section p {
-      color: #a1a1aa;
-    }
-    .dark .stat-card {
-      background: #18181b;
-      border-color: #27272a;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.15);
-    }
-    .dark .stat-card .text-heading,
-    .dark .stat-card div:first-child {
-      color: #fafafa;
-    }
-    .dark .stat-card p {
-      color: #71717a;
-    }
-    .dark .about-section h4 {
-      color: #e4e4e7;
-    }
-
-    /* FAQ section */
-    .dark .faq-section {
-      background-color: #0a0a0a;
-    }
-    .dark .faq-item {
-      border-color: #27272a;
-    }
-    .dark .faq-question {
-      color: #e4e4e7;
-    }
-    .dark .faq-answer p {
-      color: #a1a1aa;
-    }
-    .dark .faq-chevron {
-      color: #52525b;
-    }
-
-    /* CTA section */
-    .dark .cta-section {
-      background: linear-gradient(135deg, #111, #0a0a0a) !important;
-    }
-
-    /* Footer */
-    .dark footer {
-      background-color: #0a0a0a !important;
-      border-color: #1a1a1a !important;
-    }
-    .dark footer h4 {
-      color: #e4e4e7;
-    }
-    .dark footer a {
-      color: #71717a;
-    }
-    .dark footer a:hover {
-      color: #d4d4d8;
-    }
-    .dark footer .logo-text {
-      color: #fafafa;
-    }
-    .dark footer p {
-      color: #71717a;
-    }
-    .dark footer .border-t-footer {
-      border-color: #1a1a1a;
-    }
-
-    /* Chatbot widget in dark */
-    .dark .chat-widget button {
-      box-shadow: 0 4px 16px rgba(198,165,89,0.15), 0 2px 6px rgba(0,0,0,0.3) !important;
-    }
-
-    /* Scrollbar dark */
-    .dark ::-webkit-scrollbar-thumb {
-      background: #27272a;
-    }
-
-    /* Contact form card styles */
-    .contact-form-card {
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .contact-form-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 48px rgba(198,165,89,0.12), 0 4px 16px rgba(0,0,0,0.06) !important;
-    }
-
-    /* Form input states */
-    .contact-form-card input:focus,
-    .contact-form-card textarea:focus {
-      border-color: #C6A559 !important;
-      box-shadow: 0 0 0 3px rgba(198,165,89,0.1), 0 4px 12px rgba(198,165,89,0.15) !important;
-      background-color: #fafbf9;
-    }
-
-    /* Spin animation for loading */
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .animate-spin {
-      animation: spin 1s linear infinite;
-    }
-
-    /* Contact section dark mode */
-    .dark .contact-form-card {
-      background: #111 !important;
-      border-color: #27272a !important;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 2px 12px rgba(0,0,0,0.15) !important;
-    }
-    .dark .contact-form-card input,
-    .dark .contact-form-card textarea {
-      background: #18181b;
-      border-color: #27272a;
-      color: #e4e4e7;
-    }
-    .dark .contact-form-card input::placeholder,
-    .dark .contact-form-card textarea::placeholder {
-      color: #52525b;
-    }
-    .dark .contact-form-card input:focus,
-    .dark .contact-form-card textarea:focus {
-      border-color: #C6A559 !important;
-      background-color: #1a1a1e;
-    }
-    .dark .contact-form-card label {
-      color: #e4e4e7;
-    }
-
-    /* Dark mode contact section background */
-    .dark .contact-section {
-      background: linear-gradient(180deg, #111 0%, #0a0a0a 100%) !important;
-    }
-    .dark .contact-section .section-heading {
-      color: #fafafa;
-    }
-    .dark .contact-section .section-subtext {
-      color: #a1a1aa;
-    }
-
-    /* Dark mode transition on html */
-    html.dark-transition,
-    html.dark-transition *,
-    html.dark-transition *::before,
-    html.dark-transition *::after {
-      transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
+    /* Light mode overrides */
+    .light .theme-toggle { background: #fff; border-color: #e4e4e7; }
+    .light .theme-toggle-thumb { transform: translateX(0); background: #e4e4e7; }
+    .light .icon-moon { opacity: 0; }
+    .light .icon-sun { opacity: 1; stroke: #71717a; }
+    .light .track-sun { opacity: 0; }
+    .light .track-moon { opacity: 1; stroke: #18181b; }
   </style>
 </head>
 <body>
@@ -897,15 +498,15 @@
   <div class="grain-overlay" style="filter:url(#grain);"></div>
 
   <!-- Top accent bar -->
-  <div class="fixed top-0 left-0 right-0 z-50 h-1" style="background: linear-gradient(90deg, #C6A559, #E6B979, #C6A559);"></div>
+  <div class="fixed top-0 left-0 right-0 z-50 h-[2px]" style="background: linear-gradient(90deg, transparent 5%, #C6A559 30%, #E6B979 50%, #C6A559 70%, transparent 95%);"></div>
 
   <!-- ===== NAVIGATION ===== -->
-  <nav class="fixed left-0 right-0 z-50 bg-white anim-fade-in" style="top: 4px; box-shadow: 0 1px 0 #f0f0f0;">
-    <div class="max-w-[1330px] mx-auto px-6 flex items-center justify-between" style="height: 68px;">
+  <nav class="fixed left-0 right-0 z-50 anim-fade-in" style="top: 2px; background: rgba(10,8,4,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(198,165,89,0.06);">
+    <div class="max-w-[1330px] mx-auto px-6 flex items-center justify-between" style="height: 72px;">
       <!-- Logo -->
       <a href="#" class="flex items-center gap-3" aria-label="Tester.io Home">
-        <img src="brand_assets/Tester Logo.png" alt="Tester.io" class="w-16 h-16">
-        <span class="logo-text font-heading font-bold text-3xl text-heading" style="letter-spacing: -0.03em;">Tester.io</span>
+        <img src="brand_assets/Tester Logo.png" alt="Tester.io" class="w-14 h-14">
+        <span class="font-heading font-bold text-3xl" style="letter-spacing: -0.04em; color: #fafafa;">Tester<span style="color: #C6A559;">.</span>io</span>
       </a>
 
       <!-- Desktop nav links -->
@@ -924,47 +525,35 @@
         <div id="themeToggle" class="theme-toggle" role="button" tabIndex="0" aria-label="Toggle dark mode">
           <div class="theme-toggle-track">
             <div class="theme-toggle-thumb">
-              <!-- Moon icon (visible in light mode, sits on thumb) -->
-              <svg class="theme-icon icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-              </svg>
-              <!-- Sun icon (visible in dark mode, sits on thumb) -->
-              <svg class="theme-icon icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-              </svg>
+              <svg class="theme-icon icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              <svg class="theme-icon icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             </div>
-            <!-- Static icons on the track -->
-            <svg class="theme-track-icon track-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-            <svg class="theme-track-icon track-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
+            <svg class="theme-track-icon track-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="theme-track-icon track-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           </div>
         </div>
-        <a href="#" class="btn-outline px-5 py-2 rounded-lg font-heading font-semibold text-base">Login</a>
-        <a href="#" class="btn-primary px-5 py-2.5 rounded-lg font-heading font-semibold text-base">Get Started</a>
+        <a href="#" class="btn-outline px-5 py-2 rounded-lg font-heading font-semibold text-sm" style="letter-spacing: 0.02em;">Login</a>
+        <a href="#" class="btn-primary px-5 py-2.5 rounded-lg font-heading font-semibold text-sm" style="letter-spacing: 0.02em;">Get Started</a>
       </div>
 
       <!-- Mobile menu button -->
       <button id="mobileMenuBtn" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
-        <span class="block w-5 h-0.5 bg-heading rounded-full" style="transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></span>
-        <span class="block w-5 h-0.5 bg-heading rounded-full" style="transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></span>
-        <span class="block w-3.5 h-0.5 bg-heading rounded-full" style="transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></span>
+        <span class="block w-5 h-0.5 rounded-full" style="background: #d4d4d8; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></span>
+        <span class="block w-5 h-0.5 rounded-full" style="background: #d4d4d8; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></span>
+        <span class="block w-3.5 h-0.5 rounded-full" style="background: #d4d4d8; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></span>
       </button>
     </div>
   </nav>
 
   <!-- Mobile menu overlay -->
-  <div id="mobileMenu" class="fixed inset-0 z-40 pointer-events-none bg-white" style="opacity: 0; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+  <div id="mobileMenu" class="fixed inset-0 z-40 pointer-events-none" style="background: #0a0804; opacity: 0; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
     <div class="flex flex-col items-center justify-center h-full gap-6 pt-16">
-      <a href="#features" class="text-xl font-heading font-semibold text-heading">Product</a>
-      <a href="#pricing" class="text-xl font-heading font-semibold text-heading">Pricing</a>
-      <a href="#trusted" class="text-xl font-heading font-semibold text-heading">Customers</a>
-      <a href="#about" class="text-xl font-heading font-semibold text-heading">Company</a>
-      <a href="#faq" class="text-xl font-heading font-semibold text-heading">Resources</a>
-      <a href="#" class="text-xl font-heading font-semibold text-heading">Partners</a>
-      <!-- Mobile Theme Toggle -->
+      <a href="#features" class="text-xl font-heading font-semibold" style="color: #fafafa;">Product</a>
+      <a href="#pricing" class="text-xl font-heading font-semibold" style="color: #fafafa;">Pricing</a>
+      <a href="#trusted" class="text-xl font-heading font-semibold" style="color: #fafafa;">Customers</a>
+      <a href="#about" class="text-xl font-heading font-semibold" style="color: #fafafa;">Company</a>
+      <a href="#faq" class="text-xl font-heading font-semibold" style="color: #fafafa;">Resources</a>
+      <a href="#" class="text-xl font-heading font-semibold" style="color: #fafafa;">Partners</a>
       <div id="themeToggleMobile" class="theme-toggle" role="button" tabIndex="0" aria-label="Toggle dark mode">
         <div class="theme-toggle-track">
           <div class="theme-toggle-thumb">
@@ -983,32 +572,63 @@
   </div>
 
   <!-- ===== HERO SECTION ===== -->
-  <section class="hero-section px-6 relative overflow-hidden" style="background: #0a0804; min-height: 100vh; display: flex; align-items: center; padding-top: 80px; padding-bottom: 40px;">
-    <!-- WebGL Shader Background Canvas -->
+  <section class="hero-section px-6 relative overflow-hidden" style="background: #0a0804; min-height: 100vh; display: flex; align-items: center; padding-top: 90px; padding-bottom: 60px;">
+    <!-- WebGL Shader Background -->
     <canvas id="shaderCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
-    <!-- Soft gradient overlay to fade shader at bottom edge -->
-    <div style="position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,#fff);z-index:1;pointer-events:none;"></div>
+    <!-- Bottom fade to next section -->
+    <div style="position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(to bottom,transparent,#0a0804);z-index:1;pointer-events:none;"></div>
+
     <div class="max-w-[1230px] mx-auto relative w-full" style="z-index:2;">
       <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-        <!-- Left: Text (bigger, emphasized) -->
-        <div class="flex-1 anim-slide-left delay-2" style="background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 70%, transparent 100%); border-radius: 20px; padding: 40px 36px; backdrop-filter: blur(2px);">
-          <p class="font-heading font-bold uppercase tracking-widest mb-5" style="color: #E6B979; font-size: 1.2rem; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">AI-Powered QA Platform</p>
-          <h1 class="hero-heading shimmer-text font-heading font-extrabold leading-tight" style="font-size: clamp(3rem, 6vw, 4.5rem); letter-spacing: -0.03em; line-height: 1.1; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.3);">
-            Streamline Quality<br>
-            <span style="color: #E6B979;">Assurance</span> with Tester.io<br>
-            Management
+        <!-- Left: Text -->
+        <div class="flex-1 anim-slide-left delay-2" style="max-width: 620px;">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style="background: rgba(198,165,89,0.08); border: 1px solid rgba(198,165,89,0.15);">
+            <div class="w-2 h-2 rounded-full" style="background: #C6A559; box-shadow: 0 0 8px rgba(198,165,89,0.5);"></div>
+            <span class="font-heading font-semibold uppercase text-sm" style="color: #E6B979; letter-spacing: 0.12em;">AI-Powered QA Platform</span>
+          </div>
+
+          <h1 class="shimmer-text font-heading font-extrabold leading-none" style="font-size: clamp(3.2rem, 6vw, 5rem); letter-spacing: -0.04em; line-height: 1.05; color: #fafafa;">
+            Streamline<br>
+            <span class="font-display italic gold-text" style="font-size: 1.1em; letter-spacing: -0.02em;">Quality</span>
+            <span style="color: #fafafa;"> Assurance</span><br>
+            <span style="color: rgba(250,250,250,0.6); font-weight: 700;">with Tester.io</span>
           </h1>
-          <p class="hero-sub mt-8 max-w-lg anim-fade-up delay-4" style="font-size: 20px; line-height: 1.7; color: rgba(255,255,255,0.9); text-shadow: 0 1px 6px rgba(0,0,0,0.4);">
+
+          <p class="mt-8 max-w-lg anim-fade-up delay-4" style="font-size: 19px; line-height: 1.75; color: rgba(161,161,170,0.9);">
             The all-in-one platform for QA teams to automate testing, track bugs, and deliver flawless software — faster than ever.
           </p>
+
           <div class="flex flex-wrap gap-4 mt-10 anim-fade-up delay-5">
-            <a href="#" class="btn-primary px-8 py-3.5 rounded-lg font-heading font-bold" style="font-size: 1.1rem; box-shadow: 0 4px 16px rgba(198,165,89,0.4);">Get Started Free</a>
-            <a href="#" class="btn-outline px-8 py-3.5 rounded-lg font-heading font-bold" style="font-size: 1.1rem; border-color: #E6B979; color: #E6B979; border-width: 2px;">Watch Demo</a>
+            <a href="#" class="btn-primary px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem; box-shadow: 0 4px 24px rgba(198,165,89,0.25), 0 0 60px rgba(198,165,89,0.08);">
+              Get Started Free
+              <svg class="inline-block ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+            <a href="#" class="btn-outline px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem;">Watch Demo</a>
+          </div>
+
+          <!-- Social proof mini -->
+          <div class="flex items-center gap-4 mt-12 anim-fade-up delay-7">
+            <div class="flex -space-x-2">
+              <div class="w-9 h-9 rounded-full border-2" style="border-color: #0a0804; background: linear-gradient(135deg, #C6A559, #A88A3D);"></div>
+              <div class="w-9 h-9 rounded-full border-2" style="border-color: #0a0804; background: linear-gradient(135deg, #3f3f46, #52525b);"></div>
+              <div class="w-9 h-9 rounded-full border-2" style="border-color: #0a0804; background: linear-gradient(135deg, #E6B979, #C6A559);"></div>
+              <div class="w-9 h-9 rounded-full border-2" style="border-color: #0a0804; background: linear-gradient(135deg, #52525b, #71717a);"></div>
+            </div>
+            <div>
+              <div class="flex items-center gap-1">
+                <svg class="w-4 h-4" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-4 h-4" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-4 h-4" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-4 h-4" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-4 h-4" style="color: #C6A559;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              </div>
+              <p style="font-size: 13px; color: #9ca3af; margin-top: 2px;">Trusted by 2,000+ QA teams</p>
+            </div>
           </div>
         </div>
 
-        <!-- Right: Interactive 3D Logo with liquid morph -->
-        <div class="flex-shrink-0">
+        <!-- Right: Interactive 3D Logo -->
+        <div class="flex-shrink-0 anim-scale-reveal delay-3">
           <div class="hero-logo-container" id="heroLogoContainer">
             <div class="hero-logo-3d" id="heroLogo3d">
               <div class="liquid-blob" id="liquidBlob"></div>
@@ -1021,170 +641,94 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ===== CONTACT FORM SECTION ===== -->
-  <section id="contact" class="contact-section px-6 py-20 relative overflow-hidden" style="background: linear-gradient(180deg, #f7f7f7 0%, #fff 100%);">
-    <div class="max-w-[900px] mx-auto relative z-10">
-      <!-- Section heading -->
-      <div class="text-center mb-16">
-        <p class="text-base font-heading font-semibold uppercase tracking-widest mb-3 section-animate" style="color: #C6A559;">Get in Touch</p>
-        <h2 class="font-heading font-bold text-heading shimmer-text section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.02em; line-height: 1.2;">
-          We'd love to hear from you
-        </h2>
-        <p class="mt-4 text-text max-w-2xl mx-auto section-animate stagger-2" style="font-size: 17px; line-height: 1.7;">
-          Have questions or ready to streamline your QA process? Reach out and our team will get back to you within 24 hours.
-        </p>
-      </div>
-
-      <!-- Contact form card -->
-      <div class="contact-form-card section-animate stagger-3" style="background: #fff; border: 1.5px solid #f0ebe0; border-radius: 16px; padding: 48px; box-shadow: 0 8px 40px rgba(198,165,89,0.08), 0 2px 12px rgba(0,0,0,0.04);">
-        <form id="contactForm" class="flex flex-col gap-6">
-          <!-- Form grid: 2 columns on desktop -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Name field -->
-            <div>
-              <label for="formName" class="block font-heading font-semibold text-heading mb-2" style="font-size: 1rem;">Full Name</label>
-              <input 
-                type="text" 
-                id="formName"
-                name="name" 
-                placeholder="Jane Smith" 
-                required
-                class="w-full px-4 py-3 rounded-xl border border-input-border text-heading placeholder-input-text focus:outline-none focus:border-primary focus:ring-0 focus:shadow-md" 
-                style="font-size: 1rem; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02);"
-              >
-            </div>
-
-            <!-- Email field -->
-            <div>
-              <label for="formEmail" class="block font-heading font-semibold text-heading mb-2" style="font-size: 1rem;">Work Email</label>
-              <input 
-                type="email" 
-                id="formEmail"
-                name="email" 
-                placeholder="jane@company.com" 
-                required
-                class="w-full px-4 py-3 rounded-xl border border-input-border text-heading placeholder-input-text focus:outline-none focus:border-primary focus:ring-0 focus:shadow-md" 
-                style="font-size: 1rem; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02);"
-              >
-            </div>
-          </div>
-
-          <!-- Message field (full width) -->
-          <div>
-            <label for="formMessage" class="block font-heading font-semibold text-heading mb-2" style="font-size: 1rem;">Message</label>
-            <textarea 
-              id="formMessage"
-              name="message" 
-              placeholder="Tell us about your testing challenges or questions..." 
-              required
-              rows="5"
-              class="w-full px-4 py-3 rounded-xl border border-input-border text-heading placeholder-input-text focus:outline-none focus:border-primary focus:ring-0 focus:shadow-md resize-none" 
-              style="font-size: 1rem; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); font-family: 'Sarabun', sans-serif;"
-            ></textarea>
-          </div>
-
-          <!-- Newsletter subscription checkbox -->
-          <div class="flex items-center gap-3">
-            <input 
-              type="checkbox" 
-              id="formNewsletter"
-              name="newsletter_subscription"
-              class="w-5 h-5 rounded border-input-border cursor-pointer" 
-              style="accent-color: #C6A559;"
-            >
-            <label for="formNewsletter" class="font-body text-text cursor-pointer" style="font-size: 0.95rem;">
-              Subscribe to our newsletter for QA tips and product updates
-            </label>
-          </div>
-
-          <!-- Error message (hidden by default) -->
-          <div id="formError" class="hidden p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-heading" style="display: none;"></div>
-
-          <!-- Success message (hidden by default) -->
-          <div id="formSuccess" class="hidden p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-heading" style="display: none;">Thank you! Your message has been received. We'll be in touch shortly.</div>
-
-          <!-- Submit button -->
-          <button 
-            type="submit"
-            id="submitBtn"
-            class="btn-primary w-full md:w-auto px-10 py-3.5 rounded-xl font-heading font-bold self-start" 
-            style="font-size: 1.1rem; transition: all 0.2s ease; box-shadow: 0 4px 16px rgba(198,165,89,0.2);"
-          >
-            Send Message
-          </button>
-
-          <!-- Loading indicator -->
-          <div id="loadingSpinner" class="hidden" style="display: none;">
-            <svg class="w-5 h-5 text-primary animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-          </div>
-        </form>
+  <!-- ===== TRUSTED BY SECTION ===== -->
+  <section id="trusted" class="py-20 px-6 relative" style="background: #0a0804;">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="max-w-[1130px] mx-auto text-center section-animate">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm" style="color: #C6A559; letter-spacing: 0.15em;">Trusted by industry leaders</p>
+      <h2 class="font-heading font-bold shimmer-text" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.03em; color: #fafafa;">Trusted by QA Teams Worldwide</h2>
+    </div>
+    <!-- Infinite scrolling logo strip -->
+    <div class="mt-14" style="overflow:hidden;position:relative;">
+      <div style="position:absolute;top:0;left:0;bottom:0;width:120px;background:linear-gradient(to right,#0a0804,transparent);z-index:2;pointer-events:none;"></div>
+      <div style="position:absolute;top:0;right:0;bottom:0;width:120px;background:linear-gradient(to left,#0a0804,transparent);z-index:2;pointer-events:none;"></div>
+      <div class="trusted-scroll-track" style="display:flex;gap:80px;align-items:center;animation:scrollLogos 20s linear infinite;width:max-content;">
+        <!-- First set -->
+        <img src="https://placehold.co/200x70/1a1816/C6A559?text=Cargill&font=montserrat" alt="Cargill" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/140x70/1a1816/C6A559?text=JLL&font=montserrat" alt="JLL" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/220x70/1a1816/C6A559?text=Lendlease&font=montserrat" alt="Lendlease" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/140x70/1a1816/C6A559?text=EDI&font=montserrat" alt="EDI" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/220x70/1a1816/C6A559?text=Mapletree&font=montserrat" alt="Mapletree" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/200x70/1a1816/C6A559?text=Surbana&font=montserrat" alt="Surbana" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <!-- Duplicate set for loop -->
+        <img src="https://placehold.co/200x70/1a1816/C6A559?text=Cargill&font=montserrat" alt="Cargill" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/140x70/1a1816/C6A559?text=JLL&font=montserrat" alt="JLL" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/220x70/1a1816/C6A559?text=Lendlease&font=montserrat" alt="Lendlease" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/140x70/1a1816/C6A559?text=EDI&font=montserrat" alt="EDI" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/220x70/1a1816/C6A559?text=Mapletree&font=montserrat" alt="Mapletree" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
+        <img src="https://placehold.co/200x70/1a1816/C6A559?text=Surbana&font=montserrat" alt="Surbana" style="height:50px;opacity:0.5;filter:grayscale(100%) brightness(3);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='0.9';this.style.filter='grayscale(0%) brightness(2)'" onmouseout="this.style.opacity='0.5';this.style.filter='grayscale(100%) brightness(3)'">
       </div>
     </div>
-
-    <!-- Decorative background element -->
-    <div style="position:absolute;top:-50%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(198,165,89,0.05) 0%,transparent 70%);pointer-events:none;z-index:1;"></div>
   </section>
 
-  <!-- ===== FEATURES/DEMO + ROBOT — 2-column layout ===== -->
-  <section class="px-6 flex items-center justify-center" style="min-height: 100vh; background: #fff;">
+  <!-- ===== FEATURES/DEMO + ROBOT ===== -->
+  <section class="px-6 py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #0a0804 0%, #12100c 50%, #0a0804 100%);">
+    <!-- Ambient glow -->
+    <div class="ambient-glow" style="width:600px;height:600px;background:rgba(198,165,89,0.04);top:-100px;left:-100px;"></div>
     <div class="max-w-[1200px] w-full mx-auto section-animate">
       <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
 
         <!-- RIGHT: Features / Request Demo -->
         <div class="flex-1 w-full lg:order-2">
           <!-- Tabs -->
-          <div class="flex gap-2 mb-8">
-            <button class="tab-btn active" data-tab="features" style="font-size: 1.3rem; padding: 14px 32px;">Features</button>
-            <button class="tab-btn" data-tab="demo" style="font-size: 1.3rem; padding: 14px 32px;">Request Demo</button>
+          <div class="flex gap-2 mb-8" style="border-bottom: 1px solid rgba(198,165,89,0.08);">
+            <button class="tab-btn active" data-tab="features" style="font-size: 1.2rem; padding: 14px 28px;">Features</button>
+            <button class="tab-btn" data-tab="demo" style="font-size: 1.2rem; padding: 14px 28px;">Request Demo</button>
           </div>
 
           <!-- Tab content: Features -->
           <div id="tab-features">
-            <div class="flex flex-col gap-5">
-              <div class="flex items-start gap-5 p-6" style="background: #fafafa; border-radius: 14px; border: 1px solid #f0f0f0; box-shadow: 0 2px 12px rgba(198,165,89,0.06);">
-                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(198,165,89,0.12), rgba(198,165,89,0.04));">
+            <div class="flex flex-col gap-4">
+              <div class="glass-card flex items-start gap-5 p-6">
+                <div class="feature-icon-box">
                   <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div>
-                  <h4 class="font-heading font-bold text-heading" style="font-size: 1.4rem; letter-spacing: -0.02em;">Automated Test Execution</h4>
-                  <p class="text-text mt-1" style="font-size: 1.1rem; line-height: 1.65;">Run thousands of tests in parallel with AI-powered scheduling and prioritization.</p>
+                  <h4 class="font-heading font-bold" style="font-size: 1.3rem; letter-spacing: -0.02em; color: #e4e4e7;">Automated Test Execution</h4>
+                  <p class="mt-1" style="font-size: 1.05rem; line-height: 1.65; color: #9ca3af;">Run thousands of tests in parallel with AI-powered scheduling and prioritization.</p>
                 </div>
               </div>
 
-              <div class="flex items-start gap-5 p-6" style="background: #fafafa; border-radius: 14px; border: 1px solid #f0f0f0; box-shadow: 0 2px 12px rgba(198,165,89,0.06);">
-                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(198,165,89,0.12), rgba(198,165,89,0.04));">
+              <div class="glass-card flex items-start gap-5 p-6">
+                <div class="feature-icon-box">
                   <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
                 </div>
                 <div>
-                  <h4 class="font-heading font-bold text-heading" style="font-size: 1.4rem; letter-spacing: -0.02em;">Smart Bug Detection</h4>
-                  <p class="text-text mt-1" style="font-size: 1.1rem; line-height: 1.65;">AI identifies and categorizes bugs before they reach production.</p>
+                  <h4 class="font-heading font-bold" style="font-size: 1.3rem; letter-spacing: -0.02em; color: #e4e4e7;">Smart Bug Detection</h4>
+                  <p class="mt-1" style="font-size: 1.05rem; line-height: 1.65; color: #9ca3af;">AI identifies and categorizes bugs before they reach production.</p>
                 </div>
               </div>
 
-              <div class="flex items-start gap-5 p-6" style="background: #fafafa; border-radius: 14px; border: 1px solid #f0f0f0; box-shadow: 0 2px 12px rgba(198,165,89,0.06);">
-                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(198,165,89,0.12), rgba(198,165,89,0.04));">
+              <div class="glass-card flex items-start gap-5 p-6">
+                <div class="feature-icon-box">
                   <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
                 </div>
                 <div>
-                  <h4 class="font-heading font-bold text-heading" style="font-size: 1.4rem; letter-spacing: -0.02em;">Real-Time Analytics</h4>
-                  <p class="text-text mt-1" style="font-size: 1.1rem; line-height: 1.65;">Comprehensive dashboards with test coverage, pass rates, and trend analysis.</p>
+                  <h4 class="font-heading font-bold" style="font-size: 1.3rem; letter-spacing: -0.02em; color: #e4e4e7;">Real-Time Analytics</h4>
+                  <p class="mt-1" style="font-size: 1.05rem; line-height: 1.65; color: #9ca3af;">Comprehensive dashboards with test coverage, pass rates, and trend analysis.</p>
                 </div>
               </div>
 
-              <div class="flex items-start gap-5 p-6" style="background: #fafafa; border-radius: 14px; border: 1px solid #f0f0f0; box-shadow: 0 2px 12px rgba(198,165,89,0.06);">
-                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(198,165,89,0.12), rgba(198,165,89,0.04));">
+              <div class="glass-card flex items-start gap-5 p-6">
+                <div class="feature-icon-box">
                   <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-2.44a4.5 4.5 0 00-6.364-6.364L7.5 6.749"/></svg>
                 </div>
                 <div>
-                  <h4 class="font-heading font-bold text-heading" style="font-size: 1.4rem; letter-spacing: -0.02em;">CI/CD Integration</h4>
-                  <p class="text-text mt-1" style="font-size: 1.1rem; line-height: 1.65;">Seamless integration with Jenkins, GitHub Actions, GitLab CI, and more.</p>
+                  <h4 class="font-heading font-bold" style="font-size: 1.3rem; letter-spacing: -0.02em; color: #e4e4e7;">CI/CD Integration</h4>
+                  <p class="mt-1" style="font-size: 1.05rem; line-height: 1.65; color: #9ca3af;">Seamless integration with Jenkins, GitHub Actions, GitLab CI, and more.</p>
                 </div>
               </div>
             </div>
@@ -1192,23 +736,23 @@
 
           <!-- Tab content: Request Demo -->
           <div id="tab-demo" class="hidden">
-            <div style="background: #fafafa; border-radius: 14px; border: 1px solid #f0f0f0; box-shadow: 0 2px 12px rgba(198,165,89,0.06);">
+            <div class="glass-card" style="padding: 0;">
               <form class="flex flex-col gap-4 p-8">
                 <div>
-                  <label class="block font-heading font-semibold text-heading mb-2" style="font-size: 1.05rem;">Full Name</label>
-                  <input type="text" placeholder="John Smith" class="w-full px-5 py-3 rounded-xl border border-input-border text-heading placeholder-input-text focus:outline-none focus:border-primary" style="font-size: 1.05rem; transition: border-color 0.2s ease;">
+                  <label class="block font-heading font-semibold mb-2" style="font-size: 1rem; color: #e4e4e7;">Full Name</label>
+                  <input type="text" placeholder="John Smith" class="w-full px-5 py-3 rounded-xl border focus:outline-none" style="font-size: 1rem; background: rgba(24,24,27,0.6); border-color: rgba(198,165,89,0.1); color: #e4e4e7; transition: border-color 0.2s ease;" onfocus="this.style.borderColor='#C6A559'" onblur="this.style.borderColor='rgba(198,165,89,0.1)'">
                 </div>
                 <div>
-                  <label class="block font-heading font-semibold text-heading mb-2" style="font-size: 1.05rem;">Work Email</label>
-                  <input type="email" placeholder="john@company.com" class="w-full px-5 py-3 rounded-xl border border-input-border text-heading placeholder-input-text focus:outline-none focus:border-primary" style="font-size: 1.05rem; transition: border-color 0.2s ease;">
+                  <label class="block font-heading font-semibold mb-2" style="font-size: 1rem; color: #e4e4e7;">Work Email</label>
+                  <input type="email" placeholder="john@company.com" class="w-full px-5 py-3 rounded-xl border focus:outline-none" style="font-size: 1rem; background: rgba(24,24,27,0.6); border-color: rgba(198,165,89,0.1); color: #e4e4e7; transition: border-color 0.2s ease;" onfocus="this.style.borderColor='#C6A559'" onblur="this.style.borderColor='rgba(198,165,89,0.1)'">
                 </div>
                 <div>
-                  <label class="block font-heading font-semibold text-heading mb-2" style="font-size: 1.05rem;">Company</label>
-                  <input type="text" placeholder="Acme Inc." class="w-full px-5 py-3 rounded-xl border border-input-border text-heading placeholder-input-text focus:outline-none focus:border-primary" style="font-size: 1.05rem; transition: border-color 0.2s ease;">
+                  <label class="block font-heading font-semibold mb-2" style="font-size: 1rem; color: #e4e4e7;">Company</label>
+                  <input type="text" placeholder="Acme Inc." class="w-full px-5 py-3 rounded-xl border focus:outline-none" style="font-size: 1rem; background: rgba(24,24,27,0.6); border-color: rgba(198,165,89,0.1); color: #e4e4e7; transition: border-color 0.2s ease;" onfocus="this.style.borderColor='#C6A559'" onblur="this.style.borderColor='rgba(198,165,89,0.1)'">
                 </div>
                 <div>
-                  <label class="block font-heading font-semibold text-heading mb-2" style="font-size: 1.05rem;">Team Size</label>
-                  <select class="w-full px-5 py-3 rounded-xl border border-input-border text-input-text focus:outline-none focus:border-primary" style="font-size: 1.05rem; transition: border-color 0.2s ease;">
+                  <label class="block font-heading font-semibold mb-2" style="font-size: 1rem; color: #e4e4e7;">Team Size</label>
+                  <select class="w-full px-5 py-3 rounded-xl border focus:outline-none" style="font-size: 1rem; background: rgba(24,24,27,0.6); border-color: rgba(198,165,89,0.1); color: #9ca3af; transition: border-color 0.2s ease;">
                     <option>Select team size</option>
                     <option>1-10</option>
                     <option>11-50</option>
@@ -1216,325 +760,411 @@
                     <option>200+</option>
                   </select>
                 </div>
-                <button type="submit" class="btn-primary mt-2 px-8 py-3.5 rounded-xl font-heading font-bold w-full" style="font-size: 1.1rem;">Request a Demo</button>
+                <button type="submit" class="btn-primary mt-2 px-8 py-3.5 rounded-xl font-heading font-bold w-full" style="font-size: 1.05rem;">Request a Demo</button>
               </form>
             </div>
           </div>
         </div>
 
-        <!-- LEFT: Robot 3D Scene (square crop, gold accents) -->
-        <div class="flex-shrink-0 relative lg:order-1" style="width: 500px; height: 500px; border-radius: 22px; padding: 2px; background: linear-gradient(135deg, #C6A559, #A88A3D, #E6B979, #C6A559); box-shadow: 0 8px 40px rgba(198,165,89,0.15), 0 0 60px rgba(198,165,89,0.08);">
-          <div class="relative overflow-hidden w-full h-full" style="background: rgba(0,0,0,0.96); border-radius: 20px;">
-            <!-- Gold spotlight SVG -->
+        <!-- LEFT: Robot 3D Scene -->
+        <div class="flex-shrink-0 relative lg:order-1 section-animate" style="width: 500px; height: 500px; border-radius: 22px; padding: 2px; background: linear-gradient(135deg, rgba(198,165,89,0.6), rgba(168,138,61,0.3), rgba(230,185,121,0.6), rgba(198,165,89,0.3)); box-shadow: 0 8px 60px rgba(198,165,89,0.1), 0 0 120px rgba(198,165,89,0.04);">
+          <div class="relative overflow-hidden w-full h-full" style="background: #0a0804; border-radius: 20px;">
+            <!-- Gold spotlight -->
             <svg class="animate-spotlight pointer-events-none absolute z-[1] h-[169%] w-[138%] opacity-0" style="top:-160px;left:-100px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3787 2842" fill="none">
-              <g filter="url(#spotlightFilter)">
-                <ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501" transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)" fill="#C6A559" fill-opacity="0.2"></ellipse>
-              </g>
-              <defs>
-                <filter id="spotlightFilter" x="0.860352" y="0.838989" width="3785.16" height="2840.26" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                  <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                  <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
-                  <feGaussianBlur stdDeviation="151" result="effect1_foregroundBlur"></feGaussianBlur>
-                </filter>
-              </defs>
+              <g filter="url(#spotlightFilter)"><ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501" transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)" fill="#C6A559" fill-opacity="0.2"></ellipse></g>
+              <defs><filter id="spotlightFilter" x="0.860352" y="0.838989" width="3785.16" height="2840.26" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend><feGaussianBlur stdDeviation="151" result="effect1_foregroundBlur"></feGaussianBlur></filter></defs>
             </svg>
-            <!-- Gold ambient glow -->
             <div style="position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:300px;height:200px;background:radial-gradient(ellipse,rgba(198,165,89,0.12) 0%,transparent 70%);pointer-events:none;z-index:2;"></div>
             <div style="position:absolute;top:-30px;right:-30px;width:200px;height:200px;background:radial-gradient(circle,rgba(230,185,121,0.08) 0%,transparent 70%);pointer-events:none;z-index:2;"></div>
-            <!-- Spline 3D -->
             <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" style="width:100%;height:100%;position:absolute;top:0;left:0;" hide-logo="true"></spline-viewer>
-            <!-- Cover entire bottom to hide Spline watermark -->
-            <div style="position:absolute;bottom:0;left:0;right:0;height:55px;background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.96) 40%);z-index:10;pointer-events:none;border-radius:0 0 20px 20px;"></div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:55px;background:linear-gradient(to bottom,transparent,rgba(10,8,4,0.96) 40%);z-index:10;pointer-events:none;border-radius:0 0 20px 20px;"></div>
           </div>
         </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== TRUSTED BY SECTION ===== -->
-  <section id="trusted" class="trusted-section py-24 px-6 border-t border-b" style="border-color: #f0f0f0;">
-    <div class="max-w-[1130px] mx-auto text-center section-animate">
-      <h2 class="font-heading font-bold text-heading mb-14" style="font-size: clamp(2rem, 3.5vw, 2.8rem); letter-spacing: -0.02em;">Trusted by QA Teams Worldwide</h2>
-    </div>
-    <!-- Infinite scrolling logo strip -->
-    <div class="trusted-scroll-container" style="overflow:hidden;position:relative;">
-      <!-- Fade edges -->
-      <div style="position:absolute;top:0;left:0;bottom:0;width:120px;background:linear-gradient(to right,#fff,transparent);z-index:2;pointer-events:none;"></div>
-      <div style="position:absolute;top:0;right:0;bottom:0;width:120px;background:linear-gradient(to left,#fff,transparent);z-index:2;pointer-events:none;"></div>
-      <div class="trusted-scroll-track" style="display:flex;gap:80px;align-items:center;animation:scrollLogos 20s linear infinite;width:max-content;">
-        <!-- First set -->
-        <img src="https://placehold.co/200x70/ffffff/2f2f2f?text=Cargill&font=montserrat" alt="Cargill" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/140x70/ffffff/2f2f2f?text=JLL&font=montserrat" alt="JLL" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/220x70/ffffff/2f2f2f?text=Lendlease&font=montserrat" alt="Lendlease" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/140x70/ffffff/2f2f2f?text=EDI&font=montserrat" alt="EDI" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/220x70/ffffff/2f2f2f?text=Mapletree&font=montserrat" alt="Mapletree" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/200x70/ffffff/2f2f2f?text=Surbana&font=montserrat" alt="Surbana" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <!-- Duplicate set for seamless loop -->
-        <img src="https://placehold.co/200x70/ffffff/2f2f2f?text=Cargill&font=montserrat" alt="Cargill" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/140x70/ffffff/2f2f2f?text=JLL&font=montserrat" alt="JLL" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/220x70/ffffff/2f2f2f?text=Lendlease&font=montserrat" alt="Lendlease" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/140x70/ffffff/2f2f2f?text=EDI&font=montserrat" alt="EDI" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/220x70/ffffff/2f2f2f?text=Mapletree&font=montserrat" alt="Mapletree" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
-        <img src="https://placehold.co/200x70/ffffff/2f2f2f?text=Surbana&font=montserrat" alt="Surbana" style="height:60px;opacity:0.7;filter:grayscale(100%);transition:opacity 0.3s,filter 0.3s;" onmouseover="this.style.opacity='1';this.style.filter='grayscale(0%)'" onmouseout="this.style.opacity='0.7';this.style.filter='grayscale(100%)'">
       </div>
     </div>
   </section>
 
   <!-- ===== ONE PLATFORM SECTION ===== -->
-  <section id="features" class="features-section py-20 px-6">
-    <div class="max-w-[1130px] mx-auto text-center">
-      <h2 class="section-heading shimmer-text font-heading font-bold text-heading section-animate" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.02em; line-height: 1.2;">
-        One simple platform for all your<br>Quality Assurance needs
+  <section id="features" class="py-24 px-6 relative overflow-hidden" style="background: linear-gradient(180deg, #11100d 0%, #0e0c09 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <!-- Ambient orb -->
+    <div class="ambient-glow" style="width:700px;height:700px;background:rgba(198,165,89,0.04);top:50%;right:-200px;transform:translateY(-50%);"></div>
+
+    <div class="max-w-[1130px] mx-auto text-center relative z-10">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Platform</p>
+      <h2 class="shimmer-text font-heading font-bold section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        One simple platform for all your<br><span class="font-display italic gold-text">Quality Assurance</span> needs
       </h2>
-      <p class="section-subtext mt-4 text-text max-w-xl mx-auto section-animate stagger-1" style="font-size: 17px; line-height: 1.7;">
+      <p class="mt-5 max-w-xl mx-auto section-animate stagger-2" style="font-size: 17px; line-height: 1.75; color: #9ca3af;">
         Tester.io brings together test management, automation, bug tracking, and analytics into a single unified workspace.
       </p>
 
       <!-- Feature grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-16">
         <!-- Card 1 -->
-        <div class="feature-card tilt-card text-left p-6 rounded-xl section-animate stagger-1" style="background: #faf8f4; border: 1px solid #f0ebe0;">
-          <div class="feature-icon-box mb-4">
+        <div class="glass-card text-left p-7 section-animate stagger-1">
+          <div class="feature-icon-box mb-5">
             <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/></svg>
           </div>
-          <h3 class="font-heading font-bold text-heading text-lg mb-2">Test Case Management</h3>
-          <p class="text-text text-base" style="line-height: 1.7;">Organize, write, and manage test cases with a powerful editor. Tag, filter, and assign across teams effortlessly.</p>
+          <h3 class="font-heading font-bold text-lg mb-2" style="color: #e4e4e7; letter-spacing: -0.01em;">Test Case Management</h3>
+          <p style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Organize, write, and manage test cases with a powerful editor. Tag, filter, and assign across teams effortlessly.</p>
         </div>
         <!-- Card 2 -->
-        <div class="feature-card tilt-card text-left p-6 rounded-xl section-animate stagger-3" style="background: #faf8f4; border: 1px solid #f0ebe0;">
-          <div class="feature-icon-box mb-4">
+        <div class="glass-card text-left p-7 section-animate stagger-3">
+          <div class="feature-icon-box mb-5">
             <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"/></svg>
           </div>
-          <h3 class="font-heading font-bold text-heading text-lg mb-2">Visual Regression Testing</h3>
-          <p class="text-text text-base" style="line-height: 1.7;">Automatically detect visual changes with pixel-perfect screenshot comparisons across browsers and devices.</p>
+          <h3 class="font-heading font-bold text-lg mb-2" style="color: #e4e4e7; letter-spacing: -0.01em;">Visual Regression Testing</h3>
+          <p style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Automatically detect visual changes with pixel-perfect screenshot comparisons across browsers and devices.</p>
         </div>
         <!-- Card 3 -->
-        <div class="feature-card tilt-card text-left p-6 rounded-xl section-animate stagger-5" style="background: #faf8f4; border: 1px solid #f0ebe0;">
-          <div class="feature-icon-box mb-4">
+        <div class="glass-card text-left p-7 section-animate stagger-5">
+          <div class="feature-icon-box mb-5">
             <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
           </div>
-          <h3 class="font-heading font-bold text-heading text-lg mb-2">AI-Powered Insights</h3>
-          <p class="text-text text-base" style="line-height: 1.7;">Let AI analyze test results, predict flaky tests, and suggest priority areas to improve your release confidence.</p>
+          <h3 class="font-heading font-bold text-lg mb-2" style="color: #e4e4e7; letter-spacing: -0.01em;">AI-Powered Insights</h3>
+          <p style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Let AI analyze test results, predict flaky tests, and suggest priority areas to improve your release confidence.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== PRODUCT SECTION (like CMMS) ===== -->
-  <section id="about" class="about-section py-20 px-6" style="background: #f7f7f7;">
-    <div class="max-w-[1130px] mx-auto">
-      <div class="text-center mb-14">
-        <p class="text-base font-heading font-semibold uppercase tracking-widest mb-3 section-animate" style="color: #C6A559;">Why Tester.io</p>
-        <h2 class="font-heading font-bold text-heading shimmer-text section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.02em; line-height: 1.2;">
-          The People's Enterprise Quality<br>Management System (QMS)
+  <!-- ===== WHY TESTER.IO SECTION ===== -->
+  <section id="about" class="py-24 px-6 relative overflow-hidden" style="background: linear-gradient(180deg, #0e0c09 0%, #141210 50%, #0e0c09 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:500px;height:500px;background:rgba(198,165,89,0.04);top:-100px;left:50%;transform:translateX(-50%);"></div>
+
+    <div class="max-w-[1130px] mx-auto relative z-10">
+      <div class="text-center mb-16">
+        <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Why Tester.io</p>
+        <h2 class="font-heading font-bold shimmer-text section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+          The People's Enterprise <span class="font-display italic gold-text">Quality</span><br>Management System (QMS)
         </h2>
-        <p class="mt-4 text-text max-w-xl mx-auto section-animate stagger-2" style="font-size: 17px; line-height: 1.7;">
+        <p class="mt-5 max-w-xl mx-auto section-animate stagger-2" style="font-size: 17px; line-height: 1.75; color: #9ca3af;">
           Join over 2,000 QA teams who trust Tester.io to ship higher quality software with less effort.
         </p>
       </div>
 
       <!-- Stats row -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-14">
-        <div class="stat-card tilt-card section-animate stagger-1">
-          <div class="font-heading font-extrabold text-heading" style="font-size: 2.4rem; letter-spacing: -0.03em;">2,000+</div>
-          <p class="text-text text-base mt-2">Teams Worldwide</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+        <div class="stat-card section-animate stagger-1">
+          <div class="font-heading font-extrabold" style="font-size: 2.6rem; letter-spacing: -0.04em; color: #fafafa;">2,000+</div>
+          <p class="mt-2" style="font-size: 14px; color: #78716c; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em;">Teams Worldwide</p>
         </div>
-        <div class="stat-card tilt-card section-animate stagger-2">
-          <div class="font-heading font-extrabold" style="font-size: 2.4rem; letter-spacing: -0.03em; color: #C6A559;">98.5%</div>
-          <p class="text-text text-base mt-2">Uptime SLA</p>
+        <div class="stat-card section-animate stagger-2">
+          <div class="font-heading font-extrabold gold-text" style="font-size: 2.6rem; letter-spacing: -0.04em;">98.5%</div>
+          <p class="mt-2" style="font-size: 14px; color: #78716c; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em;">Uptime SLA</p>
         </div>
-        <div class="stat-card tilt-card section-animate stagger-3">
-          <div class="font-heading font-extrabold text-heading" style="font-size: 2.4rem; letter-spacing: -0.03em;">50M+</div>
-          <p class="text-text text-base mt-2">Tests Executed</p>
+        <div class="stat-card section-animate stagger-3">
+          <div class="font-heading font-extrabold" style="font-size: 2.6rem; letter-spacing: -0.04em; color: #fafafa;">50M+</div>
+          <p class="mt-2" style="font-size: 14px; color: #78716c; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em;">Tests Executed</p>
         </div>
-        <div class="stat-card tilt-card section-animate stagger-4">
-          <div class="font-heading font-extrabold text-heading" style="font-size: 2.4rem; letter-spacing: -0.03em;">4.9/5</div>
-          <p class="text-text text-base mt-2">Customer Rating</p>
+        <div class="stat-card section-animate stagger-4">
+          <div class="font-heading font-extrabold" style="font-size: 2.6rem; letter-spacing: -0.04em; color: #fafafa;">4.9/5</div>
+          <p class="mt-2" style="font-size: 14px; color: #78716c; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em;">Customer Rating</p>
         </div>
       </div>
 
       <!-- Two column: text + illustration -->
-      <div class="flex flex-col lg:flex-row items-center gap-12">
+      <div class="flex flex-col lg:flex-row items-center gap-14">
         <div class="flex-1">
-          <div class="flex flex-col gap-5">
-            <div class="flex items-start gap-4">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #C6A559, #E6B979);">
+          <div class="flex flex-col gap-6">
+            <div class="flex items-start gap-4 section-animate stagger-1">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #C6A559, #E6B979); box-shadow: 0 4px 12px rgba(198,165,89,0.2);">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
               </div>
               <div>
-                <h4 class="font-heading font-semibold text-heading text-lg">No-code test builder</h4>
-                <p class="text-text text-base mt-1" style="line-height: 1.7;">Create comprehensive test suites without writing a single line of code. Visual editor makes it simple.</p>
+                <h4 class="font-heading font-semibold text-lg" style="color: #e4e4e7;">No-code test builder</h4>
+                <p class="mt-1" style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Create comprehensive test suites without writing a single line of code. Visual editor makes it simple.</p>
               </div>
             </div>
-            <div class="flex items-start gap-4">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #C6A559, #E6B979);">
+            <div class="flex items-start gap-4 section-animate stagger-2">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #C6A559, #E6B979); box-shadow: 0 4px 12px rgba(198,165,89,0.2);">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
               </div>
               <div>
-                <h4 class="font-heading font-semibold text-heading text-lg">Enterprise-grade security</h4>
-                <p class="text-text text-base mt-1" style="line-height: 1.7;">SOC 2 Type II compliant with end-to-end encryption, SSO, and role-based access control.</p>
+                <h4 class="font-heading font-semibold text-lg" style="color: #e4e4e7;">Enterprise-grade security</h4>
+                <p class="mt-1" style="line-height: 1.7; color: #9ca3af; font-size: 15px;">SOC 2 Type II compliant with end-to-end encryption, SSO, and role-based access control.</p>
               </div>
             </div>
-            <div class="flex items-start gap-4">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #C6A559, #E6B979);">
+            <div class="flex items-start gap-4 section-animate stagger-3">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #C6A559, #E6B979); box-shadow: 0 4px 12px rgba(198,165,89,0.2);">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
               </div>
               <div>
-                <h4 class="font-heading font-semibold text-heading text-lg">24/7 dedicated support</h4>
-                <p class="text-text text-base mt-1" style="line-height: 1.7;">Our support team is always available with average response times under 2 minutes.</p>
+                <h4 class="font-heading font-semibold text-lg" style="color: #e4e4e7;">24/7 dedicated support</h4>
+                <p class="mt-1" style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Our support team is always available with average response times under 2 minutes.</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="flex-1 flex justify-center">
-          <div class="relative">
-            <img src="https://placehold.co/420x320/faf8f4/C6A559?text=Dashboard+Preview" alt="Dashboard Preview" class="rounded-xl" style="box-shadow: 0 8px 32px rgba(198,165,89,0.1), 0 2px 8px rgba(0,0,0,0.04);">
-            <div class="absolute inset-0 rounded-xl" style="background: linear-gradient(135deg, rgba(198,165,89,0.05), transparent); mix-blend-mode: multiply;"></div>
+        <div class="flex-1 flex justify-center section-animate stagger-4">
+          <div class="relative" style="border-radius: 16px; padding: 1px; background: linear-gradient(135deg, rgba(198,165,89,0.3), rgba(198,165,89,0.05), rgba(198,165,89,0.2));">
+            <img src="https://placehold.co/420x320/1a1816/C6A559?text=Dashboard+Preview" alt="Dashboard Preview" style="border-radius: 15px; display: block;">
+            <div class="absolute inset-0 rounded-2xl" style="background: linear-gradient(135deg, rgba(198,165,89,0.05), transparent); mix-blend-mode: multiply;"></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT FORM SECTION ===== -->
+  <section id="contact" class="contact-section px-6 py-24 relative overflow-hidden" style="background: #0a0804;">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:500px;height:500px;background:rgba(198,165,89,0.025);top:-50%;right:-20%;"></div>
+
+    <div class="max-w-[900px] mx-auto relative z-10">
+      <div class="text-center mb-14">
+        <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Get in Touch</p>
+        <h2 class="font-heading font-bold shimmer-text section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+          We'd love to hear from you
+        </h2>
+        <p class="mt-4 max-w-2xl mx-auto section-animate stagger-2" style="font-size: 17px; line-height: 1.75; color: #9ca3af;">
+          Have questions or ready to streamline your QA process? Reach out and our team will get back to you within 24 hours.
+        </p>
+      </div>
+
+      <div class="contact-form-card section-animate stagger-3" style="border-radius: 20px; padding: 48px; box-shadow: 0 8px 60px rgba(0,0,0,0.3), 0 0 120px rgba(198,165,89,0.03);">
+        <form id="contactForm" class="flex flex-col gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="formName" class="block font-heading font-semibold mb-2" style="font-size: 0.95rem; color: #e4e4e7;">Full Name</label>
+              <input type="text" id="formName" name="name" placeholder="Jane Smith" required
+                class="w-full px-4 py-3 rounded-xl border focus:outline-none"
+                style="font-size: 1rem; background: rgba(24,24,27,0.5); border-color: rgba(198,165,89,0.1); color: #e4e4e7; transition: border-color 0.2s ease, box-shadow 0.2s ease;"
+              >
+            </div>
+            <div>
+              <label for="formEmail" class="block font-heading font-semibold mb-2" style="font-size: 0.95rem; color: #e4e4e7;">Work Email</label>
+              <input type="email" id="formEmail" name="email" placeholder="jane@company.com" required
+                class="w-full px-4 py-3 rounded-xl border focus:outline-none"
+                style="font-size: 1rem; background: rgba(24,24,27,0.5); border-color: rgba(198,165,89,0.1); color: #e4e4e7; transition: border-color 0.2s ease, box-shadow 0.2s ease;"
+              >
+            </div>
+          </div>
+
+          <div>
+            <label for="formMessage" class="block font-heading font-semibold mb-2" style="font-size: 0.95rem; color: #e4e4e7;">Message</label>
+            <textarea id="formMessage" name="message" placeholder="Tell us about your testing challenges or questions..." required rows="5"
+              class="w-full px-4 py-3 rounded-xl border focus:outline-none resize-none"
+              style="font-size: 1rem; background: rgba(24,24,27,0.5); border-color: rgba(198,165,89,0.1); color: #e4e4e7; transition: border-color 0.2s ease, box-shadow 0.2s ease; font-family: 'Sarabun', sans-serif;"
+            ></textarea>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="formNewsletter" name="newsletter_subscription" class="w-5 h-5 rounded cursor-pointer" style="accent-color: #C6A559;">
+            <label for="formNewsletter" class="font-body cursor-pointer" style="font-size: 0.95rem; color: #9ca3af;">
+              Subscribe to our newsletter for QA tips and product updates
+            </label>
+          </div>
+
+          <div id="formError" class="hidden p-4 rounded-lg text-sm font-heading" style="display: none; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5;"></div>
+          <div id="formSuccess" class="hidden p-4 rounded-lg text-sm font-heading" style="display: none; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86efac;">Thank you! Your message has been received. We'll be in touch shortly.</div>
+
+          <button type="submit" id="submitBtn"
+            class="btn-primary w-full md:w-auto px-10 py-3.5 rounded-xl font-heading font-bold self-start"
+            style="font-size: 1.05rem; box-shadow: 0 4px 24px rgba(198,165,89,0.2), 0 0 60px rgba(198,165,89,0.05);">
+            Send Message
+          </button>
+
+          <div id="loadingSpinner" class="hidden" style="display: none;">
+            <svg class="w-5 h-5 animate-spin" style="color: #C6A559;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+        </form>
       </div>
     </div>
   </section>
 
   <!-- ===== FAQ SECTION ===== -->
-  <section id="faq" class="faq-section py-20 px-6">
+  <section id="faq" class="py-24 px-6 relative" style="background: linear-gradient(180deg, #0a0804 0%, #11100d 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
     <div class="max-w-[740px] mx-auto">
-      <h2 class="section-heading shimmer-text font-heading font-bold text-heading text-center mb-12 section-animate" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.02em;">
+      <h2 class="shimmer-text font-heading font-bold text-center mb-14 section-animate" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.03em; color: #fafafa;">
         Frequently Asked Questions
       </h2>
 
       <div class="faq-list">
-        <!-- FAQ 1 -->
-        <div class="faq-item">
+        <div class="faq-item section-animate stagger-1">
           <button class="faq-question" onclick="toggleFaq(this)">
             <span>What types of testing does Tester.io support?</span>
-            <svg class="faq-chevron w-5 h-5 text-text-gray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron w-5 h-5" style="color: #52525b;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="faq-answer">
-            <p class="pb-5 text-text text-base" style="line-height: 1.7;">Tester.io supports functional testing, regression testing, visual testing, API testing, performance testing, and end-to-end testing. Our platform integrates with popular tools like Selenium, Cypress, and Playwright.</p>
+            <p class="pb-5" style="line-height: 1.7; color: #9ca3af;">Tester.io supports functional testing, regression testing, visual testing, API testing, performance testing, and end-to-end testing. Our platform integrates with popular tools like Selenium, Cypress, and Playwright.</p>
           </div>
         </div>
-        <!-- FAQ 2 -->
-        <div class="faq-item">
+        <div class="faq-item section-animate stagger-2">
           <button class="faq-question" onclick="toggleFaq(this)">
             <span>How long does it take to get started?</span>
-            <svg class="faq-chevron w-5 h-5 text-text-gray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron w-5 h-5" style="color: #52525b;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="faq-answer">
-            <p class="pb-5 text-text text-base" style="line-height: 1.7;">Most teams are up and running within 30 minutes. Our onboarding wizard guides you through setup, and our support team is available to help with migration from other tools.</p>
+            <p class="pb-5" style="line-height: 1.7; color: #9ca3af;">Most teams are up and running within 30 minutes. Our onboarding wizard guides you through setup, and our support team is available to help with migration from other tools.</p>
           </div>
         </div>
-        <!-- FAQ 3 -->
-        <div class="faq-item">
+        <div class="faq-item section-animate stagger-3">
           <button class="faq-question" onclick="toggleFaq(this)">
             <span>Does Tester.io integrate with my CI/CD pipeline?</span>
-            <svg class="faq-chevron w-5 h-5 text-text-gray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron w-5 h-5" style="color: #52525b;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="faq-answer">
-            <p class="pb-5 text-text text-base" style="line-height: 1.7;">Yes! Tester.io offers native integrations with Jenkins, GitHub Actions, GitLab CI, CircleCI, Azure DevOps, and more. We also provide a comprehensive REST API and webhooks for custom integrations.</p>
+            <p class="pb-5" style="line-height: 1.7; color: #9ca3af;">Yes! Tester.io offers native integrations with Jenkins, GitHub Actions, GitLab CI, CircleCI, Azure DevOps, and more. We also provide a comprehensive REST API and webhooks for custom integrations.</p>
           </div>
         </div>
-        <!-- FAQ 4 -->
-        <div class="faq-item">
+        <div class="faq-item section-animate stagger-4">
           <button class="faq-question" onclick="toggleFaq(this)">
             <span>What pricing plans are available?</span>
-            <svg class="faq-chevron w-5 h-5 text-text-gray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron w-5 h-5" style="color: #52525b;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="faq-answer">
-            <p class="pb-5 text-text text-base" style="line-height: 1.7;">We offer a free tier for small teams, a Pro plan for growing teams, and an Enterprise plan with custom pricing. All plans include core features with differences in team size, storage, and support levels.</p>
+            <p class="pb-5" style="line-height: 1.7; color: #9ca3af;">We offer a free tier for small teams, a Pro plan for growing teams, and an Enterprise plan with custom pricing. All plans include core features with differences in team size, storage, and support levels.</p>
           </div>
         </div>
-        <!-- FAQ 5 -->
-        <div class="faq-item">
+        <div class="faq-item section-animate stagger-5">
           <button class="faq-question" onclick="toggleFaq(this)">
             <span>Is my data secure with Tester.io?</span>
-            <svg class="faq-chevron w-5 h-5 text-text-gray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron w-5 h-5" style="color: #52525b;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="faq-answer">
-            <p class="pb-5 text-text text-base" style="line-height: 1.7;">Absolutely. We are SOC 2 Type II certified, use AES-256 encryption at rest and TLS 1.3 in transit. We also support SSO via SAML 2.0, RBAC, and audit logging for complete compliance.</p>
+            <p class="pb-5" style="line-height: 1.7; color: #9ca3af;">Absolutely. We are SOC 2 Type II certified, use AES-256 encryption at rest and TLS 1.3 in transit. We also support SSO via SAML 2.0, RBAC, and audit logging for complete compliance.</p>
           </div>
         </div>
-        <!-- FAQ 6 -->
-        <div class="faq-item">
+        <div class="faq-item section-animate stagger-6">
           <button class="faq-question" onclick="toggleFaq(this)">
             <span>Can I migrate from another testing tool?</span>
-            <svg class="faq-chevron w-5 h-5 text-text-gray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron w-5 h-5" style="color: #52525b;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div class="faq-answer">
-            <p class="pb-5 text-text text-base" style="line-height: 1.7;">Yes, we provide one-click migration tools for popular platforms including TestRail, Zephyr, qTest, and more. Our migration team will assist with custom imports at no extra cost.</p>
+            <p class="pb-5" style="line-height: 1.7; color: #9ca3af;">Yes, we provide one-click migration tools for popular platforms including TestRail, Zephyr, qTest, and more. Our migration team will assist with custom imports at no extra cost.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCTS SECTION ===== -->
+  <section id="products" class="py-24 px-6 relative overflow-hidden" style="background: linear-gradient(180deg, #0a0804 0%, #12100c 50%, #0a0804 100%);">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <div class="ambient-glow" style="width:600px;height:600px;background:rgba(198,165,89,0.04);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+
+    <div class="max-w-[1130px] mx-auto relative z-10">
+      <p class="font-heading font-semibold uppercase tracking-widest mb-3 text-sm text-center section-animate" style="color: #C6A559; letter-spacing: 0.15em;">Products</p>
+      <h2 class="shimmer-text font-heading font-bold text-center section-animate stagger-1" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        Three products, one <span class="font-display italic gold-text">seamless platform</span>
+      </h2>
+      <p class="mt-5 max-w-xl mx-auto text-center section-animate stagger-2" style="font-size: 17px; line-height: 1.75; color: #9ca3af;">
+        From test case management to AI-powered insights — explore the full Tester.io product suite built for modern QA teams.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-14">
+        <!-- Test Manager -->
+        <div class="glass-card text-left p-7 section-animate stagger-3">
+          <div class="feature-icon-box mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2" style="color: #e4e4e7; letter-spacing: -0.01em;">Test Manager</h3>
+          <p style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Organize, write, and manage test cases with a powerful editor. Tag, filter, and assign across teams.</p>
+        </div>
+        <!-- Automation Hub -->
+        <div class="glass-card text-left p-7 section-animate stagger-4">
+          <div class="feature-icon-box mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2" style="color: #e4e4e7; letter-spacing: -0.01em;">Automation Hub</h3>
+          <p style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Run automated tests at scale across browsers and devices. Parallel execution with smart retries.</p>
+        </div>
+        <!-- AI Insights -->
+        <div class="glass-card text-left p-7 section-animate stagger-5">
+          <div class="feature-icon-box mb-5">
+            <svg class="w-6 h-6" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg mb-2" style="color: #e4e4e7; letter-spacing: -0.01em;">AI Insights</h3>
+          <p style="line-height: 1.7; color: #9ca3af; font-size: 15px;">Let AI predict failures, analyze coverage heatmaps, and suggest where to focus your testing effort.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-12 section-animate stagger-6">
+        <a href="product.html" class="btn-primary inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem; box-shadow: 0 4px 24px rgba(198,165,89,0.25), 0 0 80px rgba(198,165,89,0.08);">
+          Explore All Products
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- ===== CTA SECTION ===== -->
-  <section class="cta-section py-16 px-6 relative overflow-hidden" style="background: linear-gradient(135deg, #2f2f2f, #1a1a1a);">
-    <div style="position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(198,165,89,0.08) 0%,transparent 60%);pointer-events:none;"></div>
-    <div class="max-w-[740px] mx-auto text-center relative">
-      <h2 class="font-heading font-bold text-white shimmer-text section-animate" style="font-size: clamp(1.8rem, 3.5vw, 2.4rem); letter-spacing: -0.02em; line-height: 1.2;">
-        Ready to transform your QA workflow?
+  <section class="py-20 px-6 relative overflow-hidden" style="background: #0a0804;">
+    <div class="section-divider" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+    <!-- Gold gradient orbs -->
+    <div class="ambient-glow" style="width:500px;height:500px;background:rgba(198,165,89,0.04);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center, rgba(198,165,89,0.03), transparent 60%);pointer-events:none;"></div>
+
+    <div class="max-w-[700px] mx-auto text-center relative z-10">
+      <h2 class="font-heading font-bold shimmer-text section-animate" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.15; color: #fafafa;">
+        Ready to transform your<br><span class="font-display italic gold-text">QA workflow?</span>
       </h2>
-      <p class="mt-4 text-white/60" style="font-size: 17px; line-height: 1.7;">
+      <p class="mt-5 section-animate stagger-1" style="font-size: 17px; line-height: 1.75; color: #52525b;">
         Start your free trial today. No credit card required.
       </p>
-      <div class="flex flex-wrap justify-center gap-3 mt-8">
-        <a href="#" class="btn-primary px-8 py-3 rounded-lg font-heading font-semibold text-base">Get Started Free</a>
-        <a href="#" class="px-8 py-3 rounded-lg font-heading font-semibold text-base text-white/80 border border-white/20" style="transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background 0.2s ease;" onmouseover="this.style.borderColor='rgba(198,165,89,0.6)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';this.style.transform='translateY(0)'" onfocus="this.style.outline='2px solid #E6B979';this.style.outlineOffset='3px'" onblur="this.style.outline='none'">Contact Sales</a>
+      <div class="flex flex-wrap justify-center gap-4 mt-10 section-animate stagger-2">
+        <a href="#" class="btn-primary px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem; box-shadow: 0 4px 24px rgba(198,165,89,0.25), 0 0 80px rgba(198,165,89,0.08);">
+          Get Started Free
+          <svg class="inline-block ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="#" class="btn-outline px-8 py-3.5 rounded-xl font-heading font-bold" style="font-size: 1rem;">Contact Sales</a>
       </div>
     </div>
   </section>
 
   <!-- ===== FOOTER ===== -->
-  <footer class="py-12 px-6 bg-white" style="border-top: 1px solid #f0f0f0;">
+  <footer class="py-14 px-6" style="background: #0a0804; border-top: 1px solid rgba(198,165,89,0.06);">
     <div class="max-w-[1130px] mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
-        <!-- Column 1 -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
         <div>
           <a href="#" class="flex items-center gap-2 mb-5">
             <img src="brand_assets/Tester Logo.png" alt="Tester.io" class="w-11 h-11">
-            <span class="logo-text font-heading font-bold text-heading" style="letter-spacing: -0.03em;">Tester.io</span>
+            <span class="font-heading font-bold" style="letter-spacing: -0.03em; color: #fafafa;">Tester<span style="color: #C6A559;">.</span>io</span>
           </a>
-          <p class="text-text text-base" style="line-height: 1.7;">AI-powered quality assurance for modern teams.</p>
+          <p style="line-height: 1.7; color: #52525b; font-size: 15px;">AI-powered quality assurance for modern teams.</p>
         </div>
-        <!-- Column 2 -->
         <div>
-          <h4 class="font-heading font-semibold text-heading text-base mb-4">Product</h4>
+          <h4 class="font-heading font-semibold text-sm mb-4" style="color: #e4e4e7; text-transform: uppercase; letter-spacing: 0.08em;">Product</h4>
           <ul class="flex flex-col gap-2.5">
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Features</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Pricing</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Integrations</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Changelog</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Features</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Pricing</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Integrations</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Changelog</a></li>
           </ul>
         </div>
-        <!-- Column 3 -->
         <div>
-          <h4 class="font-heading font-semibold text-heading text-base mb-4">Company</h4>
+          <h4 class="font-heading font-semibold text-sm mb-4" style="color: #e4e4e7; text-transform: uppercase; letter-spacing: 0.08em;">Company</h4>
           <ul class="flex flex-col gap-2.5">
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">About</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Blog</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Careers</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Contact</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">About</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Blog</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Careers</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Contact</a></li>
           </ul>
         </div>
-        <!-- Column 4 -->
         <div>
-          <h4 class="font-heading font-semibold text-heading text-base mb-4">Support</h4>
+          <h4 class="font-heading font-semibold text-sm mb-4" style="color: #e4e4e7; text-transform: uppercase; letter-spacing: 0.08em;">Support</h4>
           <ul class="flex flex-col gap-2.5">
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Help Center</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Documentation</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">Status</a></li>
-            <li><a href="#" class="text-text text-base hover:text-heading" style="transition: color 0.2s ease;">API Reference</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Help Center</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Documentation</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">Status</a></li>
+            <li><a href="#" style="color: #52525b; font-size: 15px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#52525b'">API Reference</a></li>
           </ul>
         </div>
       </div>
-      <div class="border-t-footer flex flex-col md:flex-row items-center justify-between pt-8" style="border-top: 1px solid #f0f0f0;">
-        <p class="text-text-gray text-xs">&copy; 2026 Tester.io. All rights reserved.</p>
+      <div class="flex flex-col md:flex-row items-center justify-between pt-8" style="border-top: 1px solid rgba(198,165,89,0.06);">
+        <p style="color: #3f3f46; font-size: 13px;">&copy; 2026 Tester.io. All rights reserved.</p>
         <div class="flex items-center gap-6 mt-4 md:mt-0">
-          <a href="#" class="text-text-gray text-xs hover:text-heading" style="transition: color 0.2s ease;">Privacy</a>
-          <a href="#" class="text-text-gray text-xs hover:text-heading" style="transition: color 0.2s ease;">Terms</a>
-          <a href="#" class="text-text-gray text-xs hover:text-heading" style="transition: color 0.2s ease;">Cookies</a>
+          <a href="#" style="color: #3f3f46; font-size: 13px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#3f3f46'">Privacy</a>
+          <a href="#" style="color: #3f3f46; font-size: 13px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#3f3f46'">Terms</a>
+          <a href="#" style="color: #3f3f46; font-size: 13px; transition: color 0.2s ease;" onmouseover="this.style.color='#C6A559'" onmouseout="this.style.color='#3f3f46'">Cookies</a>
         </div>
       </div>
     </div>
@@ -1542,7 +1172,7 @@
 
   <!-- Chatbot widget -->
   <div class="fixed bottom-6 right-6 z-50">
-    <button class="w-14 h-14 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #C6A559, #A88A3D); box-shadow: 0 4px 16px rgba(198,165,89,0.3), 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'" aria-label="Chat">
+    <button class="w-14 h-14 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #C6A559, #A88A3D); box-shadow: 0 4px 24px rgba(198,165,89,0.25), 0 0 60px rgba(198,165,89,0.08); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'" aria-label="Chat">
       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
         <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
       </svg>
@@ -1585,11 +1215,8 @@
       const answer = btn.nextElementSibling;
       const chevron = btn.querySelector('.faq-chevron');
       const isOpen = answer.classList.contains('open');
-
-      // Close all
       document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
       document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('open'));
-
       if (!isOpen) {
         answer.classList.add('open');
         chevron.classList.add('open');
@@ -1645,7 +1272,6 @@
       let autoAngle = 0;
       let rafId = null;
 
-      // Create floating particles
       const particleCount = 8;
       const particles = [];
       for (let i = 0; i < particleCount; i++) {
@@ -1660,7 +1286,6 @@
         particles.push({ el: p, angle, radius, speed: 0.3 + Math.random() * 0.5, offset: Math.random() * Math.PI * 2 });
       }
 
-      // Animate particles
       function animateParticles(t) {
         particles.forEach(p => {
           const x = 50 + Math.cos(p.angle + t * 0.001 * p.speed) * (p.radius / 2);
@@ -1672,7 +1297,6 @@
         });
       }
 
-      // Mouse/touch interaction for 3D tilt
       container.addEventListener('mousemove', (e) => {
         if (isDragging) return;
         const rect = container.getBoundingClientRect();
@@ -1686,20 +1310,12 @@
       });
 
       container.addEventListener('mouseleave', () => {
-        if (!isDragging) {
-          targetRotX = 0;
-          targetRotY = 0;
-          autoRotate = true;
-        }
+        if (!isDragging) { targetRotX = 0; targetRotY = 0; autoRotate = true; }
       });
 
-      // Drag interaction
       container.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        autoRotate = false;
-        e.preventDefault();
+        isDragging = true; startX = e.clientX; startY = e.clientY;
+        autoRotate = false; e.preventDefault();
       });
 
       document.addEventListener('mousemove', (e) => {
@@ -1713,25 +1329,13 @@
       document.addEventListener('mouseup', () => {
         if (isDragging) {
           isDragging = false;
-          rotX = targetRotX;
-          rotY = targetRotY;
-          // Spring back smoothly
-          setTimeout(() => {
-            targetRotX = 0;
-            targetRotY = 0;
-            rotX = 0;
-            rotY = 0;
-            autoRotate = true;
-          }, 800);
+          rotX = targetRotX; rotY = targetRotY;
+          setTimeout(() => { targetRotX = 0; targetRotY = 0; rotX = 0; rotY = 0; autoRotate = true; }, 800);
         }
       });
 
-      // Touch support
       container.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        autoRotate = false;
+        isDragging = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; autoRotate = false;
       }, { passive: true });
 
       document.addEventListener('touchmove', (e) => {
@@ -1745,19 +1349,11 @@
       document.addEventListener('touchend', () => {
         if (isDragging) {
           isDragging = false;
-          rotX = targetRotX;
-          rotY = targetRotY;
-          setTimeout(() => {
-            targetRotX = 0;
-            targetRotY = 0;
-            rotX = 0;
-            rotY = 0;
-            autoRotate = true;
-          }, 800);
+          rotX = targetRotX; rotY = targetRotY;
+          setTimeout(() => { targetRotX = 0; targetRotY = 0; rotX = 0; rotY = 0; autoRotate = true; }, 800);
         }
       });
 
-      // Animation loop
       let currentRotX = 0, currentRotY = 0;
       function animate(t) {
         if (autoRotate) {
@@ -1765,14 +1361,10 @@
           targetRotY = Math.sin(autoAngle) * 8;
           targetRotX = Math.cos(autoAngle * 0.7) * 4;
         }
-
-        // Smooth interpolation (spring-like)
         currentRotX += (targetRotX - currentRotX) * 0.06;
         currentRotY += (targetRotY - currentRotY) * 0.06;
-
         const floatY = Math.sin(t * 0.001) * 6;
         logo.style.transform = `translateY(${floatY}px) rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
-
         animateParticles(t);
         rafId = requestAnimationFrame(animate);
       }
@@ -1783,7 +1375,6 @@
     (function() {
       const canvas = document.getElementById('shaderCanvas');
       if (!canvas) return;
-
       const gl = canvas.getContext('webgl');
       if (!gl) { console.warn('WebGL not supported.'); return; }
 
@@ -1946,32 +1537,14 @@
       requestAnimationFrame(render);
     })();
 
-    // Theme toggle
+    // Theme toggle (not used in dark-only design but kept for functionality)
     (function() {
       const toggles = [document.getElementById('themeToggle'), document.getElementById('themeToggleMobile')];
-      const html = document.documentElement;
-
-      // Check saved preference or system preference
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        html.classList.add('dark');
-      }
-
-      function doToggle() {
-        html.classList.add('dark-transition');
-        html.classList.toggle('dark');
-        localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-        setTimeout(() => html.classList.remove('dark-transition'), 350);
-      }
-
       toggles.forEach(toggle => {
         if (!toggle) return;
-        toggle.addEventListener('click', doToggle);
+        toggle.addEventListener('click', () => {});
         toggle.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            doToggle();
-          }
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); }
         });
       });
     })();
@@ -1984,33 +1557,27 @@
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get form elements
         const submitBtn = document.getElementById('submitBtn');
         const errorDiv = document.getElementById('formError');
         const successDiv = document.getElementById('formSuccess');
-        const loadingSpinner = document.getElementById('loadingSpinner');
 
-        // Reset messages
         errorDiv.style.display = 'none';
         successDiv.style.display = 'none';
 
-        // Get form data
         const formData = new FormData(form);
         const data = {
           name: formData.get('name'),
           email: formData.get('email'),
           message: formData.get('message'),
-          newsletter_subscription: formData.get('newsletter_subscription') === 'on' // Convert checkbox to boolean
+          newsletter_subscription: formData.get('newsletter_subscription') === 'on'
         };
 
-        // Validate
         if (!data.name || !data.email || !data.message) {
           errorDiv.textContent = 'Please fill in all fields.';
           errorDiv.style.display = 'block';
           return;
         }
 
-        // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(data.email)) {
           errorDiv.textContent = 'Please enter a valid email address.';
@@ -2019,16 +1586,12 @@
         }
 
         try {
-          // Show loading state
           submitBtn.disabled = true;
           submitBtn.textContent = 'Sending...';
 
-          // Determine API endpoint (works in both static and backend served local setups)
           const apiEndpoint = (window.location.protocol.startsWith('http') && window.location.host)
             ? `${window.location.protocol}//${window.location.host}/api/contact`
             : 'http://localhost:3000/api/contact';
-
-          console.log('Contact form API endpoint:', apiEndpoint);
 
           const response = await fetch(apiEndpoint, {
             method: 'POST',
@@ -2037,16 +1600,14 @@
           });
 
           const responseData = await response.json();
-          
+
           if (!response.ok) {
             throw new Error(responseData.error || 'Failed to send message');
           }
 
-          // Success
           successDiv.style.display = 'block';
           form.reset();
 
-          // Redirect after 2 seconds
           setTimeout(() => {
             window.location.href = '/thank-you.html';
           }, 2000);
