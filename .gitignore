@@ -1,3 +1,19 @@
 node_modules/
 temporary screenshots/
 .claude/
+
+# Environment variables and credentials - NEVER commit these!
+.env
+.env.local
+.env.*.local
+
+# Local form submissions
+submissions.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Playwright
+test-results/
+playwright-report/

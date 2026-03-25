@@ -1,8 +1,27 @@
 {
+  "name": "tester-website",
+  "version": "1.0.0",
+  "description": "Tester.io Landing Page",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.12.70",
+    "@supabase/supabase-js": "^2.100.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
     "framer-motion": "^12.38.0",
-    "puppeteer": "^24.40.0"
+    "google-auth-library": "^9.4.1",
+    "googleapis": "^118.0.0",
+    "puppeteer": "^24.40.0",
+    "resend": "^6.9.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
   }
 }

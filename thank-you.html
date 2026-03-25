@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You — Tester.io</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#C6A559',
+            'primary-dark': '#A88A3D',
+            'primary-light': '#E6B979',
+            heading: '#2f2f2f',
+            text: '#676767',
+            'text-gray': '#b2b2b2',
+          },
+          fontFamily: {
+            heading: ['"Montserrat"', 'sans-serif'],
+            body: ['"Sarabun"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html {
+      font-size: 62.5%;
+      scroll-behavior: smooth;
+    }
+    body {
+      color: #676767;
+      background-color: #fff;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1.8rem;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .anim-fade-up {
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    .anim-slide-down {
+      animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    .anim-scale-in {
+      animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #C6A559, #A88A3D);
+      color: #fff;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
+    .btn-primary:focus-visible { outline: 2px solid #E6B979; outline-offset: 3px; }
+    .btn-primary:active { transform: translateY(0); opacity: 0.85; }
+
+    .success-icon {
+      animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .checkmark {
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+      opacity: 0;
+    }
+
+    .dark body {
+      background-color: #0a0a0a;
+      color: #a1a1aa;
+    }
+
+    .dark .heading {
+      color: #fafafa;
+    }
+
+    .dark .bg-white {
+      background-color: #111 !important;
+    }
+
+    .dark .text-heading {
+      color: #fafafa;
+    }
+
+    .dark .btn-primary {
+      box-shadow: 0 4px 16px rgba(198,165,89,0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="fixed left-0 right-0 z-50 bg-white" style="top: 4px; box-shadow: 0 1px 0 #f0f0f0;">
+    <div class="max-w-[1330px] mx-auto px-6 flex items-center justify-between" style="height: 68px;">
+      <a href="index.html" class="flex items-center gap-2" aria-label="Tester.io Home">
+        <img src="brand_assets/Tester Logo.png" alt="Tester.io" class="w-12 h-12">
+        <span class="font-heading font-bold text-2xl text-heading" style="letter-spacing: -0.03em;">Tester.io</span>
+      </a>
+      <a href="index.html" class="px-6 py-2 rounded-lg font-heading font-semibold text-base" style="background: linear-gradient(135deg, #C6A559, #A88A3D); color: #fff; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Back to Home</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="min-h-screen flex items-center justify-center px-6" style="padding-top: 80px;">
+    <div class="text-center max-w-2xl mx-auto">
+      <!-- Success Icon -->
+      <div class="mb-8 success-icon flex justify-center">
+        <div class="w-24 h-24 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(198,165,89,0.15), rgba(198,165,89,0.05)); border: 2px solid #C6A559;">
+          <svg class="w-12 h-12 checkmark" style="color: #C6A559;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="font-heading font-extrabold text-heading anim-fade-up" style="font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 1.6rem;">
+        Thank You!
+      </h1>
+
+      <!-- Subheading -->
+      <p class="text-xl text-text anim-fade-up delay-1" style="line-height: 1.7; margin-bottom: 2.4rem;">
+        We've received your message and appreciate you reaching out. Our team will get back to you within <strong style="color: #C6A559;">24 hours</strong> with more information.
+      </p>
+
+      <!-- Details -->
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 mb-8 anim-fade-up delay-2" style="background: linear-gradient(135deg, rgba(198,165,89,0.08), rgba(198,165,89,0.04)); border: 1px solid rgba(198,165,89,0.2);">
+        <h3 class="font-heading font-semibold text-heading mb-4" style="font-size: 1.3rem;">What happens next?</h3>
+        <ul class="text-left space-y-3">
+          <li class="flex items-start gap-3">
+            <span style="color: #C6A559; font-weight: bold; margin-top: 2px;">✓</span>
+            <span class="text-text">We'll review your message and prioritize a response</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span style="color: #C6A559; font-weight: bold; margin-top: 2px;">✓</span>
+            <span class="text-text">You'll receive an email from our team with next steps</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span style="color: #C6A559; font-weight: bold; margin-top: 2px;">✓</span>
+            <span class="text-text">If you need immediate assistance, email us at <strong>support@tester.io</strong></span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- CTA -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center anim-fade-up delay-3">
+        <a href="index.html" class="btn-primary px-8 py-3 rounded-lg font-heading font-semibold text-base inline-block" style="text-decoration: none;">
+          Back to Home
+        </a>
+        <a href="#" class="px-8 py-3 rounded-lg font-heading font-semibold text-base inline-block" style="background: #f7f7f7; color: #2f2f2f; text-decoration: none; transition: all 0.2s ease; border: 1px solid #e8e8e8;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='#f7f7f7'">
+          Explore Features
+        </a>
+      </div>
+
+      <!-- Additional Info -->
+      <p class="text-sm text-text-gray mt-12 anim-fade-up delay-3" style="line-height: 1.6;">
+        © 2026 Tester.io. All rights reserved. | <a href="#" style="color: #C6A559; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #C6A559; text-decoration: none;">Terms of Service</a>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // Optional: Trigger animations on load
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.anim-fade-up, .anim-slide-down, .anim-scale-in').forEach(el => {
+        el.style.animationPlayState = 'running';
+      });
+    });
+
+    // Optional: Auto-redirect to home after 10 seconds
+    // setTimeout(() => {
+    //   window.location.href = 'index.html';
+    // }, 10000);
+  </script>
+</body>
+</html>

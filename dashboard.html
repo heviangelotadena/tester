@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Tester.io Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#C6A559',
+            'brand-dark': '#A88A3D',
+            'brand-light': '#E6C97A',
+            'brand-muted': 'rgba(198,165,89,0.08)',
+            'brand-border': 'rgba(198,165,89,0.18)',
+            surface: '#FDFCFA',
+            'surface-2': '#F8F6F1',
+            'surface-3': '#F1EDE4',
+            ink: '#1A1A1A',
+            'ink-2': '#4A4A4A',
+            'ink-3': '#8A8A8A',
+            'ink-4': '#B8B8B8',
+          },
+          fontFamily: {
+            heading: ['"Montserrat"', 'sans-serif'],
+            body: ['"DM Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 62.5%; scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.5;
+      color: #4A4A4A;
+      background: #FDFCFA;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(198,165,89,0.3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(198,165,89,0.5); }
+
+    /* Auth gate */
+    #authGate {
+      position: fixed; inset: 0; z-index: 100;
+      background: linear-gradient(135deg, #FDFCFA 0%, #F8F6F1 50%, #F1EDE4 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #authGate.hidden { display: none; }
+
+    .auth-card {
+      background: #fff;
+      border: 1.5px solid rgba(198,165,89,0.2);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 380px;
+      box-shadow: 0 20px 60px rgba(198,165,89,0.08), 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid #E8E4DA;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      font-family: 'DM Sans', sans-serif;
+      color: #1A1A1A;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .auth-input:focus {
+      border-color: #C6A559;
+      box-shadow: 0 0 0 3px rgba(198,165,89,0.12);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #C6A559, #A88A3D);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .auth-btn:hover { transform: translateY(-1px); opacity: 0.92; }
+    .auth-btn:active { transform: translateY(0); }
+
+    /* Dashboard layout */
+    .dash-sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0;
+      width: 240px;
+      background: #fff;
+      border-right: 1px solid #F1EDE4;
+      padding: 24px 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dash-main {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding: 32px 40px 60px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 24px;
+      color: #8A8A8A;
+      font-size: 1.4rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover { color: #1A1A1A; background: rgba(198,165,89,0.04); }
+    .nav-item.active {
+      color: #C6A559;
+      background: rgba(198,165,89,0.06);
+      border-left-color: #C6A559;
+      font-weight: 600;
+    }
+
+    /* Stat cards */
+    .stat-card {
+      background: #fff;
+      border: 1px solid #F1EDE4;
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(198,165,89,0.08);
+    }
+
+    .stat-value {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: #1A1A1A;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    /* Data table */
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .data-table thead th {
+      padding: 12px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8A8A8A;
+      border-bottom: 1px solid #F1EDE4;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .data-table tbody tr {
+      transition: background 0.1s ease;
+    }
+    .data-table tbody tr:hover {
+      background: rgba(198,165,89,0.03);
+    }
+    .data-table tbody td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #F8F6F1;
+      font-size: 1.35rem;
+      color: #4A4A4A;
+      vertical-align: middle;
+    }
+
+    /* Status badge */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-new { background: #F0F4FF; color: #4A7AFF; }
+    .badge-email_sent { background: #FFF8EB; color: #C6A559; }
+    .badge-engaged { background: #EDFCF2; color: #16A34A; }
+    .badge-replied { background: #F0FDF4; color: #15803D; }
+
+    .badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .badge-new .badge-dot { background: #4A7AFF; }
+    .badge-email_sent .badge-dot { background: #C6A559; }
+    .badge-engaged .badge-dot { background: #16A34A; }
+    .badge-replied .badge-dot { background: #15803D; }
+
+    /* Funnel */
+    .funnel-bar {
+      height: 32px;
+      border-radius: 6px;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    /* Tabs */
+    .tab-btn {
+      padding: 8px 20px;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #8A8A8A;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover { color: #4A4A4A; }
+    .tab-btn.active {
+      color: #C6A559;
+      background: rgba(198,165,89,0.06);
+      border-color: rgba(198,165,89,0.15);
+      font-weight: 600;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1A1A1A;
+      letter-spacing: -0.02em;
+    }
+
+    /* Activity item */
+    .activity-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid #F8F6F1;
+    }
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    /* Loading pulse */
+    @keyframes shimmer {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+    .loading-pulse { animation: shimmer 1.5s infinite; }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.1s; }
+    .delay-3 { animation-delay: 0.15s; }
+    .delay-4 { animation-delay: 0.2s; }
+    .delay-5 { animation-delay: 0.25s; }
+  </style>
+</head>
+<body>
+
+  <!-- Auth Gate -->
+  <div id="authGate">
+    <div class="auth-card">
+      <div style="text-align:center; margin-bottom:32px;">
+        <img src="brand_assets/Tester Logo.png" alt="Tester.io" style="width:48px;height:48px;margin:0 auto 12px;">
+        <h2 style="font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:700;color:#1A1A1A;letter-spacing:-0.03em;">Dashboard</h2>
+        <p style="font-size:1.3rem;color:#8A8A8A;margin-top:4px;">Enter password to continue</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <input type="password" id="authPassword" class="auth-input" placeholder="Password" onkeydown="if(event.key==='Enter')authenticate()">
+        <button class="auth-btn" onclick="authenticate()">Sign In</button>
+        <p id="authError" style="color:#E53E3E;font-size:1.2rem;text-align:center;display:none;">Incorrect password</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="dash-sidebar" id="sidebar" style="display:none;">
+    <div style="padding:0 24px 28px; display:flex; align-items:center; gap:10px;">
+      <img src="brand_assets/Tester Logo.png" alt="" style="width:32px;height:32px;">
+      <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.6rem;color:#1A1A1A;letter-spacing:-0.03em;">Tester.io</span>
+    </div>
+
+    <nav style="flex:1;">
+      <a class="nav-item active" data-tab="overview" onclick="switchTab('overview')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a>
+      <a class="nav-item" data-tab="submissions" onclick="switchTab('submissions')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        Submissions
+      </a>
+      <a class="nav-item" data-tab="emails" onclick="switchTab('emails')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+        Email Logs
+      </a>
+      <a class="nav-item" data-tab="engagement" onclick="switchTab('engagement')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Engagement
+      </a>
+      <a class="nav-item" data-tab="followups" onclick="switchTab('followups')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Follow-ups
+      </a>
+    </nav>
+
+    <div style="padding:16px 24px;border-top:1px solid #F1EDE4;">
+      <a class="nav-item" style="padding:8px 0;" onclick="loadData()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Refresh
+      </a>
+      <a class="nav-item" style="padding:8px 0;" onclick="logout()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dash-main" id="dashMain" style="display:none;">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
+      <div>
+        <h1 style="font-family:'Montserrat',sans-serif;font-size:2.6rem;font-weight:800;color:#1A1A1A;letter-spacing:-0.03em;">Dashboard</h1>
+        <p style="font-size:1.35rem;color:#8A8A8A;margin-top:2px;" id="lastUpdated">Loading...</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="tab-btn active" onclick="loadData()" style="display:flex;align-items:center;gap:6px;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab: Overview -->
+    <div id="tab-overview">
+      <!-- Stat cards -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:36px;" id="statCards">
+        <div class="stat-card animate-in delay-1">
+          <p style="font-size:1.2rem;font-weight:500;color:#8A8A8A;margin-bottom:8px;">Total Submissions</p>
+          <p class="stat-value" id="statTotal">—</p>
+        </div>
+        <div class="stat-card animate-in delay-2">
+          <p style="font-size:1.2rem;font-weight:500;color:#8A8A8A;margin-bottom:8px;">Emails Sent</p>
+          <p class="stat-value" id="statEmails">—</p>
+        </div>
+        <div class="stat-card animate-in delay-3">
+          <p style="font-size:1.2rem;font-weight:500;color:#8A8A8A;margin-bottom:8px;">Replied</p>
+          <p class="stat-value" id="statReplied">—</p>
+        </div>
+        <div class="stat-card animate-in delay-4">
+          <p style="font-size:1.2rem;font-weight:500;color:#8A8A8A;margin-bottom:8px;">Newsletter Subscribers</p>
+          <p class="stat-value" id="statNewsletter">—</p>
+        </div>
+      </div>
+
+      <!-- Two column: Funnel + Activity -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:36px;">
+        <!-- Engagement Funnel -->
+        <div class="stat-card animate-in delay-3" style="padding:28px;">
+          <h3 class="section-title" style="margin-bottom:24px;">Engagement Funnel</h3>
+          <div id="funnelChart" style="display:flex;flex-direction:column;gap:16px;"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="stat-card animate-in delay-4" style="padding:28px;">
+          <h3 class="section-title" style="margin-bottom:16px;">Recent Activity</h3>
+          <div id="activityFeed" style="max-height:320px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+      <!-- Recent Submissions Preview -->
+      <div class="stat-card animate-in delay-5" style="padding:28px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3 class="section-title">Recent Submissions</h3>
+          <button class="tab-btn" onclick="switchTab('submissions')" style="font-size:1.2rem;">View all →</button>
+        </div>
+        <div id="recentSubmissions"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Submissions -->
+    <div id="tab-submissions" style="display:none;">
+      <div class="stat-card animate-in" style="padding:28px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3 class="section-title">All Submissions</h3>
+          <div style="display:flex;gap:8px;" id="statusFilters"></div>
+        </div>
+        <div style="overflow-x:auto;">
+          <div id="submissionsTable"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Emails -->
+    <div id="tab-emails" style="display:none;">
+      <div class="stat-card animate-in" style="padding:28px;">
+        <h3 class="section-title" style="margin-bottom:20px;">Email Logs</h3>
+        <div style="overflow-x:auto;" id="emailLogsTable"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Engagement -->
+    <div id="tab-engagement" style="display:none;">
+      <div class="stat-card animate-in" style="padding:28px;">
+        <h3 class="section-title" style="margin-bottom:20px;">Engagement Events</h3>
+        <div style="overflow-x:auto;" id="engagementTable"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Follow-ups -->
+    <div id="tab-followups" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+        <div class="stat-card animate-in delay-1">
+          <p style="font-size:1.2rem;font-weight:500;color:#8A8A8A;margin-bottom:8px;">Pending Follow-ups</p>
+          <p class="stat-value" id="statPendingFollowups">—</p>
+        </div>
+        <div class="stat-card animate-in delay-2">
+          <p style="font-size:1.2rem;font-weight:500;color:#8A8A8A;margin-bottom:8px;">Sent Follow-ups</p>
+          <p class="stat-value" id="statSentFollowups">—</p>
+        </div>
+      </div>
+      <div class="stat-card animate-in delay-3" style="padding:28px;">
+        <h3 class="section-title" style="margin-bottom:20px;">Scheduled Follow-ups</h3>
+        <div style="overflow-x:auto;" id="followupsTable"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // ─── Auth ──────────────────────────────────────────────────────────────────
+    const DASHBOARD_PASSWORD = 'tester2026';
+    let allData = [];
+
+    function authenticate() {
+      const input = document.getElementById('authPassword').value;
+      if (input === DASHBOARD_PASSWORD) {
+        document.getElementById('authGate').classList.add('hidden');
+        document.getElementById('sidebar').style.display = 'flex';
+        document.getElementById('dashMain').style.display = 'block';
+        sessionStorage.setItem('dashAuth', 'true');
+        loadData();
+      } else {
+        document.getElementById('authError').style.display = 'block';
+        document.getElementById('authPassword').style.borderColor = '#E53E3E';
+        setTimeout(() => {
+          document.getElementById('authError').style.display = 'none';
+          document.getElementById('authPassword').style.borderColor = '#E8E4DA';
+        }, 2000);
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('dashAuth');
+      document.getElementById('authGate').classList.remove('hidden');
+      document.getElementById('sidebar').style.display = 'none';
+      document.getElementById('dashMain').style.display = 'none';
+    }
+
+    // Auto-login if already authenticated
+    if (sessionStorage.getItem('dashAuth') === 'true') {
+      document.getElementById('authGate').classList.add('hidden');
+      document.getElementById('sidebar').style.display = 'flex';
+      document.getElementById('dashMain').style.display = 'block';
+      loadData();
+    }
+
+    // ─── Data Loading ──────────────────────────────────────────────────────────
+
+    async function loadData() {
+      try {
+        const res = await fetch('/api/submissions');
+        allData = await res.json();
+        document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+        renderOverview();
+        renderSubmissionsTable(allData);
+        renderEmailLogs();
+        renderEngagement();
+        renderFollowups();
+      } catch (err) {
+        console.error('Failed to load data:', err);
+      }
+    }
+
+    // ─── Tab Switching ─────────────────────────────────────────────────────────
+
+    function switchTab(tab) {
+      document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+      document.getElementById(`tab-${tab}`).style.display = 'block';
+      document.querySelectorAll('.nav-item[data-tab]').forEach(el => el.classList.remove('active'));
+      document.querySelector(`.nav-item[data-tab="${tab}"]`)?.classList.add('active');
+    }
+
+    // ─── Helpers ───────────────────────────────────────────────────────────────
+
+    function timeAgo(dateStr) {
+      if (!dateStr) return '—';
+      const diff = Date.now() - new Date(dateStr).getTime();
+      const mins = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      if (days < 30) return `${days}d ago`;
+      return new Date(dateStr).toLocaleDateString();
+    }
+
+    function statusBadge(status) {
+      const labels = { new: 'New', email_sent: 'Email Sent', engaged: 'Engaged', replied: 'Replied' };
+      return `<span class="badge badge-${status}"><span class="badge-dot"></span>${labels[status] || status}</span>`;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ─── Render Overview ───────────────────────────────────────────────────────
+
+    function renderOverview() {
+      const total = allData.length;
+      const replied = allData.filter(s => s.engagement_status === 'replied').length;
+      const newsletter = allData.filter(s => s.newsletter_subscription).length;
+      const emailsSent = allData.reduce((sum, s) => sum + (s.email_logs?.length || 0), 0);
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statEmails').textContent = emailsSent;
+      document.getElementById('statReplied').textContent = replied;
+      document.getElementById('statNewsletter').textContent = newsletter;
+
+      // Funnel
+      const statusCounts = { new: 0, email_sent: 0, engaged: 0, replied: 0 };
+      allData.forEach(s => { if (statusCounts[s.engagement_status] !== undefined) statusCounts[s.engagement_status]++; });
+
+      const funnelColors = { new: '#4A7AFF', email_sent: '#C6A559', engaged: '#16A34A', replied: '#15803D' };
+      const funnelLabels = { new: 'New Leads', email_sent: 'Email Sent', engaged: 'Engaged', replied: 'Replied' };
+      const maxCount = Math.max(...Object.values(statusCounts), 1);
+
+      const funnelHtml = Object.entries(statusCounts).map(([status, count]) => {
+        const pct = (count / maxCount) * 100;
+        return `
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:1.25rem;font-weight:500;color:#4A4A4A;">${funnelLabels[status]}</span>
+              <span style="font-size:1.25rem;font-weight:600;color:#1A1A1A;">${count}</span>
+            </div>
+            <div style="background:#F8F6F1;border-radius:6px;overflow:hidden;">
+              <div class="funnel-bar" style="width:${pct}%;background:${funnelColors[status]};opacity:0.8;"></div>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('funnelChart').innerHTML = funnelHtml;
+
+      // Activity feed
+      const events = [];
+      allData.forEach(s => {
+        (s.engagement_events || []).forEach(e => {
+          events.push({ ...e, email: s.email, name: s.name });
+        });
+      });
+      events.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      const eventIcons = {
+        opt_in: { icon: '✉️', bg: '#FFF8EB', label: 'subscribed to newsletter' },
+        reply_received: { icon: '💬', bg: '#F0FDF4', label: 'replied to email' },
+        email_opened: { icon: '👁️', bg: '#EFF6FF', label: 'opened an email' },
+        link_clicked: { icon: '🔗', bg: '#F5F3FF', label: 'clicked a link' },
+        email_delivered: { icon: '📨', bg: '#F8F6F1', label: 'email delivered' },
+        follow_up_sent: { icon: '📬', bg: '#FFF8EB', label: 'received follow-up' },
+      };
+
+      const activityHtml = events.slice(0, 12).map(e => {
+        const cfg = eventIcons[e.event_type] || { icon: '📋', bg: '#F8F6F1', label: e.event_type };
+        return `
+          <div class="activity-item">
+            <div class="activity-icon" style="background:${cfg.bg};">${cfg.icon}</div>
+            <div>
+              <p style="font-size:1.3rem;color:#1A1A1A;font-weight:500;">${escapeHtml(e.name || e.email)}</p>
+              <p style="font-size:1.2rem;color:#8A8A8A;">${cfg.label} · ${timeAgo(e.created_at)}</p>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('activityFeed').innerHTML = activityHtml || '<p style="color:#B8B8B8;font-size:1.3rem;">No activity yet</p>';
+
+      // Recent submissions (top 5)
+      renderSubmissionsTable(allData.slice(0, 5), 'recentSubmissions');
+    }
+
+    // ─── Render Submissions ────────────────────────────────────────────────────
+
+    function renderSubmissionsTable(data, targetId = 'submissionsTable') {
+      if (!data || data.length === 0) {
+        document.getElementById(targetId).innerHTML = '<p style="color:#B8B8B8;font-size:1.3rem;padding:20px 0;">No submissions yet</p>';
+        return;
+      }
+
+      const html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th>Status</th>
+              <th>Newsletter</th>
+              <th>Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.map(s => `
+              <tr>
+                <td style="font-weight:500;color:#1A1A1A;white-space:nowrap;">${escapeHtml(s.name)}</td>
+                <td style="color:#8A8A8A;font-size:1.25rem;">${escapeHtml(s.email)}</td>
+                <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(s.message)}">${escapeHtml(s.message)}</td>
+                <td>${statusBadge(s.engagement_status || 'new')}</td>
+                <td>${s.newsletter_subscription ? '<span style="color:#16A34A;">✓ Yes</span>' : '<span style="color:#B8B8B8;">No</span>'}</td>
+                <td style="white-space:nowrap;color:#8A8A8A;font-size:1.25rem;">${timeAgo(s.created_at)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+
+      document.getElementById(targetId).innerHTML = html;
+
+      // Render filter buttons (only for full table)
+      if (targetId === 'submissionsTable') {
+        const statuses = ['all', 'new', 'email_sent', 'engaged', 'replied'];
+        const labels = { all: 'All', new: 'New', email_sent: 'Email Sent', engaged: 'Engaged', replied: 'Replied' };
+        document.getElementById('statusFilters').innerHTML = statuses.map(s =>
+          `<button class="tab-btn ${s === 'all' ? 'active' : ''}" onclick="filterSubmissions('${s}', this)">${labels[s]}</button>`
+        ).join('');
+      }
+    }
+
+    function filterSubmissions(status, btn) {
+      document.querySelectorAll('#statusFilters .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filtered = status === 'all' ? allData : allData.filter(s => s.engagement_status === status);
+      renderSubmissionsTable(filtered);
+    }
+
+    // ─── Render Email Logs ─────────────────────────────────────────────────────
+
+    function renderEmailLogs() {
+      const logs = [];
+      allData.forEach(s => {
+        (s.email_logs || []).forEach(l => {
+          logs.push({ ...l, name: s.name });
+        });
+      });
+      logs.sort((a, b) => new Date(b.sent_at || b.created_at) - new Date(a.sent_at || a.created_at));
+
+      if (logs.length === 0) {
+        document.getElementById('emailLogsTable').innerHTML = '<p style="color:#B8B8B8;font-size:1.3rem;">No emails sent yet</p>';
+        return;
+      }
+
+      const typeLabels = {
+        confirmation: '📧 Confirmation',
+        follow_up_1: '📬 Follow-up 1',
+        follow_up_2: '📬 Follow-up 2',
+        follow_up_3: '📬 Follow-up 3',
+      };
+
+      const statusColors = {
+        sent: '#16A34A',
+        failed: '#DC2626',
+        bounced: '#F59E0B',
+      };
+
+      document.getElementById('emailLogsTable').innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr><th>Recipient</th><th>Type</th><th>Subject</th><th>Status</th><th>Sent</th></tr>
+          </thead>
+          <tbody>
+            ${logs.map(l => `
+              <tr>
+                <td style="font-weight:500;color:#1A1A1A;">${escapeHtml(l.name || l.recipient_email)}</td>
+                <td>${typeLabels[l.email_type] || l.email_type}</td>
+                <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(l.subject)}</td>
+                <td><span style="color:${statusColors[l.status] || '#8A8A8A'};font-weight:600;font-size:1.2rem;">${l.status}</span></td>
+                <td style="color:#8A8A8A;font-size:1.25rem;white-space:nowrap;">${timeAgo(l.sent_at || l.created_at)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    // ─── Render Engagement ─────────────────────────────────────────────────────
+
+    function renderEngagement() {
+      const events = [];
+      allData.forEach(s => {
+        (s.engagement_events || []).forEach(e => {
+          events.push({ ...e, name: s.name, email: s.email });
+        });
+      });
+      events.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      if (events.length === 0) {
+        document.getElementById('engagementTable').innerHTML = '<p style="color:#B8B8B8;font-size:1.3rem;">No events yet</p>';
+        return;
+      }
+
+      const typeIcons = {
+        opt_in: '✉️', opt_out: '🚫', reply_received: '💬',
+        email_opened: '👁️', link_clicked: '🔗', email_delivered: '📨',
+        follow_up_sent: '📬', email_bounced: '⚠️',
+      };
+
+      document.getElementById('engagementTable').innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr><th>User</th><th>Event</th><th>Details</th><th>When</th></tr>
+          </thead>
+          <tbody>
+            ${events.map(e => `
+              <tr>
+                <td style="font-weight:500;color:#1A1A1A;">${escapeHtml(e.name || e.email)}</td>
+                <td>${typeIcons[e.event_type] || '📋'} ${e.event_type.replace(/_/g, ' ')}</td>
+                <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#8A8A8A;font-size:1.2rem;">${escapeHtml(JSON.stringify(e.event_data || {}))}</td>
+                <td style="color:#8A8A8A;font-size:1.25rem;white-space:nowrap;">${timeAgo(e.created_at)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    // ─── Render Follow-ups ─────────────────────────────────────────────────────
+
+    function renderFollowups() {
+      const followups = [];
+      allData.forEach(s => {
+        (s.scheduled_emails || []).forEach(f => {
+          followups.push({ ...f, name: s.name, email: s.email });
+        });
+      });
+      followups.sort((a, b) => new Date(a.scheduled_for) - new Date(b.scheduled_for));
+
+      const pending = followups.filter(f => !f.sent);
+      const sent = followups.filter(f => f.sent);
+
+      document.getElementById('statPendingFollowups').textContent = pending.length;
+      document.getElementById('statSentFollowups').textContent = sent.length;
+
+      if (followups.length === 0) {
+        document.getElementById('followupsTable').innerHTML = '<p style="color:#B8B8B8;font-size:1.3rem;">No follow-ups scheduled</p>';
+        return;
+      }
+
+      document.getElementById('followupsTable').innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr><th>User</th><th>Type</th><th>Scheduled For</th><th>Status</th><th>Sent At</th></tr>
+          </thead>
+          <tbody>
+            ${followups.map(f => {
+              const isPast = new Date(f.scheduled_for) < new Date();
+              const statusHtml = f.sent
+                ? '<span style="color:#16A34A;font-weight:600;">✅ Sent</span>'
+                : isPast
+                  ? '<span style="color:#DC2626;font-weight:600;">🔴 Overdue</span>'
+                  : '<span style="color:#C6A559;font-weight:600;">⏳ Pending</span>';
+              return `
+                <tr>
+                  <td style="font-weight:500;color:#1A1A1A;">${escapeHtml(f.name)}</td>
+                  <td>${f.email_type.replace(/_/g, ' ')}</td>
+                  <td style="color:#8A8A8A;">${new Date(f.scheduled_for).toLocaleDateString()} ${new Date(f.scheduled_for).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</td>
+                  <td>${statusHtml}</td>
+                  <td style="color:#8A8A8A;font-size:1.25rem;">${f.sent_at ? timeAgo(f.sent_at) : '—'}</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>`;
+    }
+  </script>
+
+</body>
+</html>
